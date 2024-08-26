@@ -1,31 +1,3 @@
-Commands to run after cloning to get vim, nvim, and tmux working:
-
-
-# Create symbolic link for Vim configuration files
-ln -s ~/.dotfiles/vim/vimrc ~/.vimrc
-
-ln -s ~/.dotfiles/vim/vim ~/.vim
-
-Then run 'vim' and pun ':PlugInstall' to install the plugins.
-
-
-# Create symbolic link for Neovim configuration
-ln -s ~/.dotfiles/nvim ~/.config/nvim
-
-Then run 'nvim' and run 'Lazy', then press 'I' to install the plugins.
-
-
-# Create symbolic link for Tmux configuration
-mkdir -p ~/.tmux/plugins
-
-ln -s ~/.dotfiles/tmux/plugins/tpm ~/.tmux/plugins/tpm
-
-ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
-
-Then run 'tmux' and press 'Ctrl + a' and 'I' to install the plugins.
-
-
-
 # Setup Instructions
 
 After cloning the repository, follow these steps to configure Vim, Neovim, and Tmux:
