@@ -30,7 +30,7 @@ return {
   },
   opts = function()
     local opts = {
-      format = {
+      default_format_opts = {
         async = false, -- not recommended to change
         quiet = false, -- not recommended to change
       },
