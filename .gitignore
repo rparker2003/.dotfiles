@@ -1,0 +1,31 @@
+# Vim/Neovim specific files
+*.swp
+*.swo
+*.swn
+*.un~
+*.tmp
+*~
+Session.vim
+.netrwhist
+.viminfo
+
+# Backup files
+*~
+*.bak
+*.backup
+
+# Python compiled files (if you have Python scripts in your dotfiles)
+*.pyc
+__pycache__/
+
+# MacOS specific files (if you use Mac)
+.DS_Store
+
+# Linux specific files
+*~
+
+# Node.js / JavaScript specific (if you're using Node)
+node_modules/
+npm-debug.log
+
+

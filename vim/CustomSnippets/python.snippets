@@ -1,0 +1,17 @@
+snippet deff "function defintion"
+def ${1:function_name}(${2:*args, **kwargs}):
+    ${3:pass}
+endsnippet
+
+snippet pr "print function"
+print($1)
+endsnippet
+
+snippet prv "print function with a value"
+print('$1: ', ${1})
+endsnippet
+
+snippet ifmain "If a module is running as a standalone app"
+if __name__ == '__main__':
+	$1
+endsnippet
