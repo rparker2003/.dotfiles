@@ -28,4 +28,5 @@ __pycache__/
 node_modules/
 npm-debug.log
 
-
+# Vim plug folder
+vim/vim/plugged
