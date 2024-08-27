@@ -1,6 +1,6 @@
-[submodule "/home/rparker/.dotfiles/tmux/plugins/tpm"]
-	path = /home/rparker/.dotfiles/tmux/plugins/tpm
+[submodule "tmux/plugins/tpm"]
+	path = tmux/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm
-[submodule "/home/rparker/.dotfiles/vim/vim/autoload/vim-plug"]
-	path = /home/rparker/.dotfiles/vim/vim/autoload/vim-plug
+[submodule "vim/vim/autoload/vim-plug"]
+	path = vim/vim/autoload/vim-plug
 	url = https://github.com/junegunn/vim-plug
