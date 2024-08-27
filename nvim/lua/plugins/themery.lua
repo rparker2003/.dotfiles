@@ -1,8 +1,18 @@
 return {
   "zaldih/themery.nvim",
   config = function()
+    -- local themes = vim.fn.getcompletion("", "color")
+    local themes = {
+      "gruvbox",
+      "bamboo",
+      "catppuccin",
+      "flow",
+      "cyberdream",
+      "tokyonight",
+    }
+
     require("themery").setup({
-      themes = { "gruvbox", "bamboo", "catppuccin", "flow" },
+      themes = themes,
       livePreview = true,
     })
   end,
