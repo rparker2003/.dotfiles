@@ -3,7 +3,7 @@ return {
   config = function()
     require("auto-save").setup({
       enabled = true,
-      debounce_delay = 500,
+      debounce_delay = 1000,
     })
   end,
 }
