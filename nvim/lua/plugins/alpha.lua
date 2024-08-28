@@ -31,7 +31,6 @@ return {
     init = false,
     opts = function()
       local dashboard = require("alpha.themes.dashboard")
-      local headers = require("util.alpha-headers")
       local theta = require("alpha.themes.theta")
       local cdir = vim.fn.getcwd()
 
