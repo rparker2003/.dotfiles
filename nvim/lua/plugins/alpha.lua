@@ -1,56 +1,148 @@
+local header_module = require("util.alpha-headers")
+
+local function pick_random(t)
+  local keys = vim.tbl_keys(t)
+  local random_key = keys[math.random(#keys)]
+  return t[random_key]
+end
+
+-- Pick a random header from the imgs table
+local selected_header = pick_random(header_module.imgs)
+
+-- Check if selected_header is nil and provide a default value if needed
+if not selected_header then
+  print("Error: No headers found.")
+  selected_header = { "No headers available" }
+end
+
 return {
-  'goolord/alpha-nvim',
-  event = 'VimEnter',
-  opts = function()
-    local dashboard = require 'alpha.themes.dashboard'
+  { "nvimdev/dashboard-nvim", optional = true, enabled = false },
+  { "echasnovski/mini.starter", optional = true, enabled = false },
+  {
+    "folke/persistence.nvim",
+    opts = { autoload = false },
+  },
 
-    dashboard.section.header.val = {
-      [[⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀]],
-      [[⠀⠀⠀⠀⠀⠀⠀⠀⢀⡤⠦⣄⠀⠀⠀⠀⠀⠀⣠⠶⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀]],
-      [[⠀⠀⠀⠀⠀⠀⠀⠀⡞⠀⠀⢈⣧⠀⠀⠀⠀⣼⠁⠀⠀⣷⠀⠀⠀⠀⠀⠀⠀⠀]],
-      [[⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⠴⣿⣿⠀⠀⠀⠀⣧⠀⠠⣾⣿⠀⠀⠀⠀⠀⠀⠀⠀]],
-      [[⠀⠀⠀⠀⠀⠀⠀⠀⠹⣄⣀⡴⠃⠀⠀⠀⠀⠘⢦⣀⣠⠏⠀⠀⠀⠀⠀⠀⠀⠀]],
-      [[⠀⠀⠀⣀⣀⡀⠀⠀⠀⠀⠉⠀⢀⣠⣤⣤⣄⡀⠀⠉⠀⠀⠀⠀⢀⣀⣀⠀⠀⠀]],
-      [[⠀⠀⢸⡏⠉⠛⠷⣤⣤⣤⡴⠞⠋⠉⠀⠀⠉⠙⠷⢦⣤⣤⣤⠾⠋⠉⢹⡇⠀⠀]],
-      [[⠀⠀⠘⠳⠶⠶⠶⠶⢦⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⡴⠶⠶⠶⠶⠞⠁⠀⠀]],
-      [[⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣦⡀⠀⠀⠀⠀⢀⣴⡿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀]],
-      [[⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⢶⣤⣤⡶⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀]],
-      [[⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀]],
-    }
+  -- Fast and fully programmable greeter dashboard
+  {
+    "goolord/alpha-nvim",
+    event = "VimEnter",
+    enabled = true,
+    init = false,
+    opts = function()
+      local dashboard = require("alpha.themes.dashboard")
+      local headers = require("util.alpha-headers")
+      local theta = require("alpha.themes.theta")
+      local cdir = vim.fn.getcwd()
 
-    dashboard.section.buttons.val = {
-      dashboard.button('f', ' ' .. ' Find file', ':Telescope find_files <CR>'),
-      dashboard.button('n', '󱨋 ' .. ' Notes', ':ObsidianQuickSwitch <CR>'),
-      dashboard.button('c', ' ' .. ' Config', ':e $MYVIMRC <CR>'),
-      dashboard.button('q', ' ' .. ' Quit', ':qa<CR>'),
-    }
+      -- stylua: ignore
+      dashboard.section.header.val = selected_header
+      -- dashboard.section.header.val = {
+      --   [[=================     ===============     ===============   ========  ======== ]],
+      --   [[\\ . . . . . . .\\   //. . . . . . .\\   //. . . . . . .\\  \\. . .\\// . . //]],
+      --   [[||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .|| ]],
+      --   [[|| . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . || ]],
+      --   [[||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .|| ]],
+      --   [[|| . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\ . . . . || ]],
+      --   [[||. . ||   ||-'  || ||  `-||   || . .|| ||. . ||   ||-'  || ||  `|\_ . .|. .|| ]],
+      --   [[|| . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\ `-_/| . || ]],
+      --   [[||_-' ||  .|/    || ||    \|.  || `-_|| ||_-' ||  .|/    || ||   | \  / |-_.|| ]],
+      --   [[||    ||_-'      || ||      `-_||    || ||    ||_-'      || ||   | \  / |  `|| ]],
+      --   [[||    `'         || ||         `'    || ||    `'         || ||   | \  / |   || ]],
+      --   [[||            .===' `===.         .==='.`===.         .===' /==. |  \/  |   || ]],
+      --   [[||         .=='   \_|-_ `===. .==='   _|_   `===. .===' _-|/   `==  \/  |   || ]],
+      --   [[||      .=='    _-'    `-_  `='    _-'   `-_    `='  _-'   `-_  /|  \/  |   || ]],
+      --   [[||   .=='    _-'          '-__\._-'         '-_./__-'         `' |. /|  |   || ]],
+      --   [[||.=='    _-'                                                     `' |  /==.|| ]],
+      --   [[=='    _-'                        N E O V I M                         \/   `==]],
+      --   [[\   _-'                                                                `-_   /]],
+      --   [[ `''                                                                      ``' ]],
+      -- }
+      dashboard.section.buttons.val = {
+        {
+          type = "group",
+          val = {
+            {
+              type = "text",
+              val = "Recent files",
+              opts = {
+                hl = "SpecialComment",
+                shrink_margin = false,
+                position = "center",
+              },
+            },
+            { type = "padding", val = 1 },
+            {
+              type = "group",
+              val = function()
+                return { theta.mru(0, cdir, 5) }
+              end,
+              opts = { shrink_margin = false },
+            },
+          },
+        },
+        { type = "padding", val = 2 },
 
-    local header_hl = 'String'
-    local button_hl = 'vimCommentTitle'
+        { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
+        { type = "padding", val = 1 },
+        dashboard.button("f", " " .. " Find file", LazyVim.pick()),
+        dashboard.button("n", " " .. " New file", [[<cmd> ene <BAR> startinsert <CR>]]),
+        dashboard.button("r", " " .. " Recent files", LazyVim.pick("oldfiles")),
+        dashboard.button("g", " " .. " Find text", LazyVim.pick("live_grep")),
+        { type = "text", val = "-------", opts = { hl = "Comment", position = "center" } },
+        dashboard.button("c", " " .. " Config", LazyVim.pick.config_files()),
+        dashboard.button("s", " " .. " Restore Session", [[<cmd> lua require('persistence').load() <CR>]]),
+        dashboard.button("u", " " .. " Update plugins", "<cmd> Lazy sync <CR>"),
+        dashboard.button("x", " " .. " Lazy Extras", "<cmd> LazyExtras <CR>"),
+        dashboard.button("l", "󰒲 " .. " Lazy", "<cmd> Lazy <CR>"),
+        dashboard.button("q", " " .. " Quit", "<cmd> qa <CR>"),
+        { type = "padding", val = 1 },
+      }
+      for _, button in ipairs(dashboard.section.buttons.val) do
+        if button.on_press then
+          button.opts.hl = "AlphaButtons"
+          button.opts.hl_shortcut = "AlphaShortcut"
+        end
+      end
+      dashboard.section.header.opts.hl = "AlphaHeader"
+      dashboard.section.buttons.opts.hl = "AlphaButtons"
+      dashboard.section.buttons.opts.spacing = 0
+      dashboard.section.footer.opts.hl = "AlphaFooter"
+      return dashboard
+    end,
 
-    for _, button in ipairs(dashboard.section.buttons.val) do
-      button.opts.hl = button_hl
-      button.opts.hl_shortcut = button_hl
-    end
+    -- Credits: https://github.com/LazyVim/LazyVim
+    config = function(_, dashboard)
+      -- close Lazy and re-open when the dashboard is ready
+      if vim.o.filetype == "lazy" then
+        vim.cmd.close()
+        vim.api.nvim_create_autocmd("User", {
+          once = true,
+          pattern = "AlphaReady",
+          callback = function()
+            require("lazy").show()
+          end,
+        })
+      end
 
-    dashboard.section.header.opts.hl = header_hl
+      require("alpha").setup(dashboard.opts)
 
-    dashboard.opts.layout[1].val = 10
-    dashboard.opts.layout[3].val = 3
-
-    return dashboard
-  end,
-  config = function(_, dashboard)
-    if vim.o.filetype == 'lazy' then
-      vim.cmd.close()
-      vim.api.nvim_create_autocmd('User', {
+      vim.api.nvim_create_autocmd("User", {
         once = true,
-        pattern = 'AlphaReady',
+        pattern = "LazyVimStarted",
         callback = function()
-          require('lazy').show()
+          local stats = require("lazy").stats()
+          local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+          dashboard.section.footer.val = "⚡ Neovim loaded "
+            .. stats.loaded
+            .. "/"
+            .. stats.count
+            .. " plugins in "
+            .. ms
+            .. "ms"
+          pcall(vim.cmd.AlphaRedraw)
         end,
       })
-    end
-    require('alpha').setup(dashboard.opts)
-  end,
+    end,
+  },
 }
