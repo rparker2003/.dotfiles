@@ -4,7 +4,7 @@ return {
   lazy = false,
   config = function()
     require("donut").setup({
-      timeout = 60,
+      timeout = 300, -- 5 minutes
       sync_donuts = false,
     })
   end,
