@@ -2,6 +2,12 @@
 
 After cloning the repository, follow these steps to configure Vim, Neovim, and Tmux:
 
+## Submodule cloning
+
+```sh
+    git submodule update --init --recursive
+```
+
 ## Vim Configuration
 
 1. **Create symbolic links for Vim configuration files:**
@@ -50,3 +56,10 @@ After cloning the repository, follow these steps to configure Vim, Neovim, and T
 2. **Install plugins:**
 
     Start Tmux and press `Ctrl + a` followed by `I` to install the plugins.
+
+
+## Optional set NVIM as git core editor
+
+```sh
+    git config --global core.editor "nvim"
+```
