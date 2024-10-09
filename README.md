@@ -8,21 +8,28 @@ After cloning the repository, follow these steps to configure Vim, Neovim, and T
     git submodule update --init --recursive
 ```
 
-## Vim Configuration
-
-1. **Create symbolic links for Vim configuration files:**
-
-    ```sh
-    ln -s ~/.dotfiles/vim/vimrc ~/.vimrc
-    ln -s ~/.dotfiles/vim/vim ~/.vim
+<!-- ## Vim Configuration -->
+<!---->
+<!-- 1. **Create symbolic links for Vim configuration files:** -->
+<!---->
+<!--     ```sh -->
+<!--     ln -s ~/.dotfiles/vim/vimrc ~/.vimrc -->
+<!--     ln -s ~/.dotfiles/vim/vim ~/.vim -->
+<!--     ``` -->
+<!---->
+<!-- 2. **Install plugins:** -->
+<!---->
+<!--     Open Vim and run: -->
+<!---->
+<!--     ```vim -->
+<!--     :PlugInstall -->
     ```
 
-2. **Install plugins:**
+## Alacritty Configuration
 
-    Open Vim and run:
-
-    ```vim
-    :PlugInstall
+1. Create symbolic link for Alacritty configuration:
+    ```bash
+    ln -s ~/.dotfiles/alacritty/ ~/.config/alacritty
     ```
 
 ## Neovim Configuration
