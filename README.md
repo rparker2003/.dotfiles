@@ -23,7 +23,7 @@ After cloning the repository, follow these steps to configure Vim, Neovim, and T
 <!---->
 <!--     ```vim -->
 <!--     :PlugInstall -->
-    ```
+<!-- ``` -->
 
 ## Alacritty Configuration
 
