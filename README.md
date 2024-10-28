@@ -28,42 +28,41 @@ After cloning the repository, follow these steps to configure Vim, Neovim, and T
 ## Alacritty Configuration
 
 1. Create symbolic link for Alacritty configuration:
-    ```bash
-    ln -s ~/.dotfiles/alacritty/ ~/.config/alacritty
-    ```
+   ```bash
+   ln -s ~/.dotfiles/alacritty ~/.config/alacritty
+   ```
 
 ## Neovim Configuration
 
 1. **Create symbolic link for Neovim configuration:**
 
-    ```sh
-    ln -s ~/.dotfiles/nvim ~/.config/nvim
-    ```
+   ```sh
+   ln -s ~/.dotfiles/nvim ~/.config/nvim
+   ```
 
 2. **Install plugins:**
 
-    Open Neovim and run:
+   Open Neovim and run:
 
-    ```lua
-    :Lazy
-    ```
+   ```lua
+   :Lazy
+   ```
 
-    Then press `I` to install the plugins.
+   Then press `I` to install the plugins.
 
 ## Tmux Configuration
 
 1. **Create symbolic link for Tmux configuration:**
 
-    ```sh
-    mkdir -p ~/.tmux/plugins
-    ln -s ~/.dotfiles/tmux/plugins/tpm ~/.tmux/plugins/tpm
-    ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
-    ```
+   ```sh
+   mkdir -p ~/.tmux/plugins
+   ln -s ~/.dotfiles/tmux/plugins/tpm ~/.tmux/plugins/tpm
+   ln -s ~/.dotfiles/tmux/tmux.conf ~/.tmux.conf
+   ```
 
 2. **Install plugins:**
 
-    Start Tmux and press `Ctrl + a` followed by `I` to install the plugins.
-
+   Start Tmux and press `Ctrl + a` followed by `I` to install the plugins.
 
 ## Optional set NVIM as git core editor
 
