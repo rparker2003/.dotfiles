@@ -146,3 +146,45 @@ export PYTHONPATH="$HOME/gfs/sixty/bflat/python/build/lib.linux-x86_64-cpython-3
 
 ## cmake for amps build
 export PATH=$HOME/gfs/oss/cmake/2.8.1/bin:$PATH
+
+# Pull down an AMPS release: ARG1 - version/label for release
+getamps() {
+  local save_dir="$HOME/ampsVersion" # Set the target directory
+  mkdir -p "$save_dir"               # Create the directory if it doesn't exist
+
+  for ver in "$@"; do
+    ver="${ver//-/_}" # Convert any dashes to underscores
+
+    release_name="AMPS-${ver}-Release-Linux"
+
+    # If "develop" is requested, always replace with a fresh copy
+    [[ $ver == 'develop' && -e "$save_dir/${release_name}/bin/ampServer" ]] && rm -rf "$save_dir/${release_name}"
+
+    if [ ! -e "$save_dir/${release_name}/bin/ampServer" ]; then
+      wget -P "$save_dir" "http://devnull.crankuptheamps.com/releases/amps/${ver}/${release_name}.tar.gz" &&
+        tar --directory="$save_dir" -xvf "$save_dir/${release_name}.tar.gz" &&
+        echo "$save_dir/${release_name}.tar.gz" &&
+        rm -rf "$save_dir/${release_name}.tar.gz" # Remove the tar.gz file after extraction
+    fi
+  done
+}
+
+getdebug() {
+  local save_dir="$HOME/ampsVersion" # Set the target directory
+  mkdir -p "$save_dir"               # Create the directory if it doesn't exist
+
+  for ver in "$@"; do
+    ver="${ver//-/_}" # Convert any dashes to underscores
+
+    release_name="AMPS-${ver}-Debug-ASAN-Linux"
+
+    # If "develop" is requested, always replace with a fresh copy
+    [[ $ver == 'develop' && -e "$save_dir/${release_name}/bin/ampServer" ]] && rm -rf "$save_dir/${release_name}"
+
+    if [ ! -e "$save_dir/${release_name}/bin/ampServer" ]; then
+      wget -P "$save_dir" "http://devnull.crankuptheamps.com/releases/amps/${ver}/${release_name}.tar.gz" &&
+        tar --directory="$save_dir" -xvf "$save_dir/${release_name}.tar.gz" &&
+        rm -rf "$save_dir/${release_name}.tar.gz" # Remove the tar.gz file after extraction
+    fi
+  done
+}
