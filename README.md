@@ -35,9 +35,16 @@ After cloning the repository, follow these steps to configure Vim, Neovim, and T
 ## ZSH Configuration
 
 1. Create symbolic link for ZSH configuration:
+
    ```bash
    ln -s ~/.dotfiles/zsh/zshrc ~/.zshrc
    ```
+
+2. Download Oh-My-Zsh:
+
+```bash
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+```
 
 ## Neovim Configuration
 
