@@ -219,3 +219,7 @@ export JIRA_URL="https://crankuptheamps.atlassian.net/"
 
 # set amps client python Path
 # export PYTHONPATH="$HOME/gfs/sixty/amps-client-python/wip/build/lib.linux-x86_64-cpython-312/:$PYTHONPATH"
+
+# set COVFILE for bullseye coverage
+export COVFILE=$HOME/gfs/sixty/amps/bullseye_coverage.cov
+export PATH=$HOME/gfs/bullseye/bullseye/9.9.6/bin:$PATH
