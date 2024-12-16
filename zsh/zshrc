@@ -156,7 +156,7 @@ export PATH="$HOME/.lazygit/:$PATH"
 ## bflat python packages
 # export PYTHONPATH="$HOME/gfs/sixty/bflat/python/build/lib.linux-x86_64-cpython-312/:$PYTHONPATH"
 # export PYTHONPATH="$HOME/gfs/sixty/bflat/python/build/lib.linux-x86_64-2.7/:$PYTHONPATH"
-export PYTHONPATH="$HOME/gfs/sixty/bflat/python/build/bflat:$PYTHONPATH"
+# export PYTHONPATH="$HOME/gfs/sixty/bflat/python/build/lib.linux-x86_64-cpython-311/:$PYTHONPATH"
 
 ## cmake for amps build
 export PATH=$HOME/gfs/oss/cmake/2.8.1/bin:$PATH
@@ -214,6 +214,16 @@ runfit () {
   time ./fit -a ${executable} "$@"
 }
 
+runfitdebug () {
+  branch_name="${1//-/_}" # Convert any dashes to underscores
+  getdebug $branch_name
+
+  executable="$HOME/ampsVersion/AMPS-${branch_name}-Debug-ASAN-Linux/bin/ampServer"
+
+  shift # Remove our first argument
+  time ./fit -a ${executable} "$@"
+}
+
 # set jira url to be used by jira plugin
 export JIRA_URL="https://crankuptheamps.atlassian.net/"
 
@@ -223,3 +233,9 @@ export JIRA_URL="https://crankuptheamps.atlassian.net/"
 # set COVFILE for bullseye coverage
 export COVFILE=$HOME/gfs/sixty/amps/bullseye_coverage.cov
 export PATH=$HOME/gfs/bullseye/bullseye/9.9.6/bin:$PATH
+
+alias vi='nvim'
+
+makebuild () {
+   rm -rf * && cmake .. -DENABLE_ASSERT:STRING="ON" -DCMAKE_BUILD_TYPE:STRING="Debug" -DENABLE_DEV_LOG:STRING="ON" && make -j 8 install
+}
