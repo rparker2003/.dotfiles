@@ -73,6 +73,9 @@ setup_zsh() {
   log "Setting up Zsh..."
   ln -sfn ~/.dotfiles/zsh/zshrc ~/.zshrc
 
+  # Powerlevel10k theme configuration
+  ln -sfn ~/.dotfiles/zsh/p10k.zsh ~/.p10k.zsh
+
   # Install Oh My Zsh if not installed
   if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
     log "Installing Oh My Zsh..."
