@@ -1,0 +1,21 @@
+# ~/.config/ghostty/config
+
+# Set theme
+theme = "tokyonight-storm"
+
+# Font configuration
+font-family = "Fira Code"
+font-size = 12
+
+# Cursor style (options: block, beam, underline)
+cursor-style = bar
+
+# Set integration with zsh
+shell-integration = zsh
+
+# Turn off top header bar for ghostty
+window-decoration = false
+
+# Opacity and blur
+# background-opacity = 0.9
+# background-blur-radius = 20

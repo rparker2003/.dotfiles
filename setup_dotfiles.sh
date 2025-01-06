@@ -40,14 +40,55 @@ clone_submodules() {
 }
 
 # Step 3: Prompt user for Alacritty setup
-setup_alacritty() {
-  read -p "Do you want to set up Alacritty on this machine? (y/n): " setup_alacritty
-  if [[ "$setup_alacritty" == "y" ]]; then
-    log "Setting up Alacritty..."
+# setup_alacritty() {
+#   read -p "Do you want to set up Alacritty on this machine? (y/n): " setup_alacritty
+#   if [[ "$setup_alacritty" == "y" ]]; then
+#     log "Setting up Alacritty..."
+#     mkdir -p ~/.config
+#     ln -sfn ~/.dotfiles/alacritty ~/.config/alacritty
+#   else
+#     log "Skipping Alacritty setup."
+#   fi
+# }
+
+# Step 3: Prompt user for Ghostty setup
+setup_ghostty() {
+  read -p "Do you want to set up Ghostty on this machine? (y/n): " setup_ghostty
+  if [[ "$setup_ghostty" == "y" ]]; then
+    log "Setting up Ghostty..."
     mkdir -p ~/.config
-    ln -sfn ~/.dotfiles/alacritty ~/.config/alacritty
+
+    # Install Ghostty based on OS
+    if [[ -f /etc/os-release ]]; then
+      source /etc/os-release
+      case "$ID" in
+      ubuntu | debian)
+        # Ubuntu/Debian specific installation
+        sudo apt update
+        sudo apt install -y software-properties-common
+        sudo add-apt-repository ppa:pgdev/ghostty -y
+        sudo apt update
+        sudo apt install -y ghostty
+        ;;
+      fedora | rhel)
+        # Fedora/RHEL specific installation
+        sudo dnf copr enable pgdev/ghostty -y
+        sudo dnf install -y ghostty
+        ;;
+      *)
+        log "Ghostty is not supported on this OS: $ID"
+        exit 1
+        ;;
+      esac
+    else
+      log "Cannot determine OS type. Skipping Ghostty setup."
+      return
+    fi
+
+    # Create configuration symlink
+    ln -sfn ~/.dotfiles/ghostty ~/.config/ghostty
   else
-    log "Skipping Alacritty setup."
+    log "Skipping Ghostty setup."
   fi
 }
 
@@ -93,7 +134,8 @@ log "Starting setup..."
 
 install_dependencies
 clone_submodules
-setup_alacritty
+# setup_alacritty
+setup_ghostty
 setup_neovim
 setup_tmux
 setup_zsh
