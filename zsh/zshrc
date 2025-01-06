@@ -36,7 +36,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Uncomment one of the following lines to change the auto-update behavior
 # zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
+zstyle ':omz:update' mode auto      # update automatically without asking
 # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
@@ -236,6 +236,13 @@ export PATH=$HOME/gfs/bullseye/bullseye/9.9.6/bin:$PATH
 
 alias vi='nvim'
 
-makebuild () {
-   rm -rf * && cmake .. -DENABLE_ASSERT:STRING="ON" -DCMAKE_BUILD_TYPE:STRING="Debug" -DENABLE_DEV_LOG:STRING="ON" && make -j 8 install
+makebuild() {
+    # Ensure we're in the "build" directory
+    if [[ "${PWD##*/}" != "build" ]]; then
+        echo "Error: This script must be run from a directory named 'build'."
+        return 1
+    fi
+
+    # Proceed with the build process
+    rm -rf * && cmake .. -DENABLE_ASSERT:STRING="ON" -DCMAKE_BUILD_TYPE:STRING="Debug" -DENABLE_DEV_LOG:STRING="ON" && make -j 8 install
 }
