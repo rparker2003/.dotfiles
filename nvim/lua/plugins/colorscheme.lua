@@ -39,7 +39,7 @@ return {
       require("flow").setup({
         transparent = true,
         fluo_color = "pink",
-        mode = "normal",
+        mode = "base",
         aggressive_spell = false,
       })
     end,
@@ -50,7 +50,7 @@ return {
     priority = 1000,
     opts = {},
     config = function()
-      require("flow").setup({
+      require("cyberdream").setup({
         transparent = true,
       })
     end,
