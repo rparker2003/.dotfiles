@@ -9,6 +9,11 @@ return {
   config = function()
     require("neo-tree").setup({
       filesystem = {
+        follow_current_file = {
+          enabled = true,
+          leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+        },
+        enable_git_status = true,
         filtered_items = {
           always_show_by_pattern = {
             "*.log",
