@@ -16,6 +16,8 @@ shell-integration = zsh
 # Turn off top header bar for ghostty
 window-decoration = false
 
+clipboard-trim-trailing-whitespace
+
 # Opacity and blur
 # background-opacity = 0.9
 # background-blur-radius = 20
