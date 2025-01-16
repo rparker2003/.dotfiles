@@ -15,6 +15,8 @@ return {
         },
         enable_git_status = true,
         filtered_items = {
+          hide_dotfiles = false,
+          hide_gitignored = false,
           always_show_by_pattern = {
             "*.log",
           },
