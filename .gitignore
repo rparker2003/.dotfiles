@@ -30,3 +30,6 @@ npm-debug.log
 
 # Vim plug folder
 vim/vim/plugged
+
+# Nvim version file
+nvim/lazyvim.json
