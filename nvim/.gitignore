@@ -9,3 +9,4 @@ data
 
 # Ignore Lazy.nvim lock file
 lazy-lock.json
+lazyvim.json
