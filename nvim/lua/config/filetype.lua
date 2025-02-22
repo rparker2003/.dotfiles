@@ -3,5 +3,6 @@ vim.filetype.add({
   extension = {
     stage = "python",
     test = "python",
+    stress = "python",
   },
 })

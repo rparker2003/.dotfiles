@@ -52,13 +52,6 @@ return {
           },
         },
         lualine_x = {
-          {
-            function()
-              local key = require("grapple").name_or_index()
-              return "  [" .. key .. "]"
-            end,
-            cond = require("grapple").exists,
-          },
                     -- stylua: ignore
                     {
                         function() return "  " .. require("dap").status() end,

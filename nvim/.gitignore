@@ -1,12 +1,7 @@
-tt.*
-.tests
-doc/tags
-debug
-.repro
-foo.*
-*.log
-data
+tags
+test.sh
+.luarc.json
+nvim
 
-# Ignore Lazy.nvim lock file
+spell/
 lazy-lock.json
-lazyvim.json
