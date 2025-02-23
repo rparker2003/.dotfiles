@@ -64,7 +64,7 @@ return {
         { type = "text",    val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
         { type = "padding", val = 1 },
         -- dashboard.button("f", " " .. " Find file", LazyVim.pick()),
-       dashboard.button("n", " " .. " New file", [[<cmd> ene <BAR> startinsert <CR>]]),
+        dashboard.button("n", " " .. " New file", [[<cmd> ene <BAR> startinsert <CR>]]),
         -- dashboard.button("r", " " .. " Recent files", LazyVim.pick("oldfiles")),
         -- dashboard.button("g", " " .. " Find text", LazyVim.pick("live_grep")),
         { type = "text",    val = "-------", opts = { hl = "Comment", position = "center" } },
