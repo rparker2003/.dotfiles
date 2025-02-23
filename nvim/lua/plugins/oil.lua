@@ -4,14 +4,14 @@ return {
   config = function()
     require("oil").setup({
       default_file_explorer = true, -- Replace netrw with Oil
-      columns = { "icon" }, -- Show icons in Oil
+      columns = { "icon" },         -- Show icons in Oil
       keymaps = {
         ["q"] = "actions.close",
         ["<CR>"] = "actions.select",
         ["<C-v>"] = "actions.select_vsplit",
         ["<C-s>"] = "actions.select_split",
         ["<C-t>"] = "actions.select_tab",
-        [".."] = "actions.parent", -- Go up a directory
+        [".."] = "actions.parent",  -- Go up a directory
         ["_"] = "actions.open_cwd", -- Open current directory
         ["g?"] = "actions.show_help",
       },
@@ -29,4 +29,3 @@ return {
     vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open Oil File Explorer" }) -- Press `-` to open Oil
   end,
 }
-

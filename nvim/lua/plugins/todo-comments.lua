@@ -22,9 +22,9 @@ return {
       end,
       desc = "Previous [t]odo comment",
     },
-    { "<leader>xt", "<cmd>TodoTrouble<cr>", desc = "[t]odo list (all)" },
-    { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>", desc = "[T]odo/Fix/Fixme list" },
-    { "<leader>st", "<cmd>TodoTelescope<cr>", desc = "[t]odo" },
+    { "<leader>xt", "<cmd>TodoTrouble<cr>",                           desc = "[t]odo list (all)" },
+    { "<leader>xT", "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>",   desc = "[T]odo/Fix/Fixme list" },
+    { "<leader>st", "<cmd>TodoTelescope<cr>",                         desc = "[t]odo" },
     { "<leader>sT", "<cmd>TodoTelescope keywords=TODO,FIX,FIXME<cr>", desc = "[T]odo/Fix/Fixme" },
   },
 }

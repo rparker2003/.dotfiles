@@ -1,91 +1,66 @@
--- [[ custom settings ]]
--- store custor position and file marks history
+-- [[ UI Settings]]
+vim.opt.termguicolors = true  -- use terminal colors for gui
 
--- [[ theprimeagen settings ]]
-vim.opt.guicursor = ""
+vim.opt.nu = true             -- show line nums
+vim.opt.relativenumber = true -- show relative line nums
+vim.opt.scrolloff = 8         -- scroll when 8 lines away from edge
 
--- [[ line display ]]
-vim.opt.nu = true
-vim.opt.relativenumber = true
+vim.opt.cursorline = true     -- highlight line where cursor is located
+vim.opt.signcolumn = "yes"    -- always enable sign column to left of nums
+vim.opt.colorcolumn = "80"    -- highlight column at 80 chars as line ref point
+vim.opt.wrap = false          -- let lines wrap to next line
 
--- [[ indenting ]]
+vim.opt.guicursor = ""        -- disable cursor shape changen in insert/visual
+
+
+-- [[ Indentation Settings ]]
 local function set_indent(width)
-  vim.opt.shiftwidth = width
-  vim.opt.tabstop = width
-  vim.opt.softtabstop = width
+  vim.opt.shiftwidth = width  -- number of spaces for auto-indent
+  vim.opt.tabstop = width     -- number of spaces that a tab char represents
+  vim.opt.softtabstop = width -- number of spaces used for tab completion
 end
-set_indent(2)
+set_indent(2)                 -- set indentation width to 2 spaces
 
-vim.opt.expandtab = true
+vim.opt.expandtab = true      -- expand tabs into spaces
 
-vim.opt.smartindent = true
+vim.opt.smartindent = true    -- enable smart indent
+vim.opt.breakindent = true    -- enable automatic wrapping of indented lines
 
-vim.opt.wrap = false
+-- [[ File Handling ]]
+vim.opt.swapfile = false                               -- Disable swap files
+vim.opt.backup = false                                 -- Dispable backups
+vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- Set undo dir
+vim.opt.undofile = true                                -- Enable persistend undo
 
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-vim.opt.undofile = true
+-- [[ Seach Settings ]]
+vim.opt.hlsearch = false -- disable highlithing of search matches
+vim.opt.incsearch = true -- enable incremental search
 
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
-
-vim.opt.termguicolors = true
-
-vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
-vim.opt.isfname:append("@-@")
-
-vim.opt.updatetime = 50
-
-vim.opt.colorcolumn = "80"
-
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
-
--- [[ Setting options ]]
--- See `:help vim.opt`
---  For more options, you can see `:help option-list`
-
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = "a"
-
--- Don't show the mode, since it's already in the status line
-vim.opt.showmode = false
-
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
--- vim.schedule(function()
---   vim.opt.clipboard = "unnamedplus"
--- end)
-
--- Enable break indent
-vim.opt.breakindent = true
-
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
+-- Case-insensitive searching UNLESS \C or 1+ capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
--- Decrease mapped sequence wait time
-vim.opt.timeoutlen = 300
+-- [[ General Settings ]]
+vim.opt.mouse = "a"      -- enable mouse mode
 
--- Configure how new splits should be opened
+vim.opt.showmode = false -- dont show mode, we show it in status line
+
+-- [[ Split Settings ]]
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
-vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+-- [[ Whitespace & Display Settings ]]
+vim.opt.list = true -- show all whitespacechars
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" } -- change char icons
 
--- Preview substitutions live, as you type!
-vim.opt.inccommand = "split"
+vim.opt.inccommand = "split" -- preview substitutions live
 
--- Show which line your cursor is on
-vim.opt.cursorline = true
+-- [[ Nerd Font Support ]]
+vim.g.have_nerd_font = true -- enable if nerd font installed
 
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
+-- [[ Time & Performance Settings ]]
+vim.opt.updatetime = 50  -- update time for various operations (in ms)
+vim.opt.timeoutlen = 300 -- decreased map sequence wait time (in ms)
+
+-- [[ Miscellaneous ]]
+vim.opt.isfname:append("@-@") -- ensure file names can contain chars like @-@

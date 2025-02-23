@@ -1,14 +1,19 @@
+-- Create helper functions for autogroups and autocommands
 local augroup = vim.api.nvim_create_augroup
-local ThePrimeagenGroup = augroup("ThePrimeagen", {})
-local yank_group = augroup("HighlightYank", {})
-local restore_group = augroup("RestoreCursor", {})
 local autocmd = vim.api.nvim_create_autocmd
 
--- [[ primeagen settings ]]
+-- Define custom autogroups
+local yank_group = augroup("HighlightYank", {})
+local restore_group = augroup("RestoreCursor", {})
+local format_group = augroup("CodeFormatting", {})
+local lsp_group = augroup("LspConfig", {})
+
+-- Function to reload plenary
 function R(name)
   require("plenary.reload").reload_module(name)
 end
 
+-- Highlight text when yanking
 autocmd("TextYankPost", {
   group = yank_group,
   pattern = "*",
@@ -20,14 +25,16 @@ autocmd("TextYankPost", {
   end,
 })
 
+-- Trim trailing whitespace before saving a file
 autocmd({ "BufWritePre" }, {
-  group = ThePrimeagenGroup,
+  group = format_group,
   pattern = "*",
   command = [[%s/\s\+$//e]],
 })
 
+-- Set up keymaps when LSP atatches to a buffer
 autocmd("LspAttach", {
-  group = ThePrimeagenGroup,
+  group = lsp_group,
   callback = function(e)
     local opts = { buffer = e.buf }
     vim.keymap.set("n", "gd", function()
@@ -63,7 +70,7 @@ autocmd("LspAttach", {
   end,
 })
 
--- [[ custom settings ]]
+-- Restore cursor position when reopening a file
 autocmd("BufReadPost", {
   group = restore_group,
   callback = function()

@@ -16,7 +16,7 @@ if not selected_header then
 end
 
 return {
-  { "nvimdev/dashboard-nvim", optional = true, enabled = false },
+  { "nvimdev/dashboard-nvim",   optional = true, enabled = false },
   { "echasnovski/mini.starter", optional = true, enabled = false },
   {
     "folke/persistence.nvim",
@@ -36,27 +36,6 @@ return {
 
       -- stylua: ignore
       dashboard.section.header.val = selected_header
-      -- dashboard.section.header.val = {
-      --   [[=================     ===============     ===============   ========  ======== ]],
-      --   [[\\ . . . . . . .\\   //. . . . . . .\\   //. . . . . . .\\  \\. . .\\// . . //]],
-      --   [[||. . ._____. . .|| ||. . ._____. . .|| ||. . ._____. . .|| || . . .\/ . . .|| ]],
-      --   [[|| . .||   ||. . || || . .||   ||. . || || . .||   ||. . || ||. . . . . . . || ]],
-      --   [[||. . ||   || . .|| ||. . ||   || . .|| ||. . ||   || . .|| || . | . . . . .|| ]],
-      --   [[|| . .||   ||. _-|| ||-_ .||   ||. . || || . .||   ||. _-|| ||-_.|\ . . . . || ]],
-      --   [[||. . ||   ||-'  || ||  `-||   || . .|| ||. . ||   ||-'  || ||  `|\_ . .|. .|| ]],
-      --   [[|| . _||   ||    || ||    ||   ||_ . || || . _||   ||    || ||   |\ `-_/| . || ]],
-      --   [[||_-' ||  .|/    || ||    \|.  || `-_|| ||_-' ||  .|/    || ||   | \  / |-_.|| ]],
-      --   [[||    ||_-'      || ||      `-_||    || ||    ||_-'      || ||   | \  / |  `|| ]],
-      --   [[||    `'         || ||         `'    || ||    `'         || ||   | \  / |   || ]],
-      --   [[||            .===' `===.         .==='.`===.         .===' /==. |  \/  |   || ]],
-      --   [[||         .=='   \_|-_ `===. .==='   _|_   `===. .===' _-|/   `==  \/  |   || ]],
-      --   [[||      .=='    _-'    `-_  `='    _-'   `-_    `='  _-'   `-_  /|  \/  |   || ]],
-      --   [[||   .=='    _-'          '-__\._-'         '-_./__-'         `' |. /|  |   || ]],
-      --   [[||.=='    _-'                                                     `' |  /==.|| ]],
-      --   [[=='    _-'                        N E O V I M                         \/   `==]],
-      --   [[\   _-'                                                                `-_   /]],
-      --   [[ `''                                                                      ``' ]],
-      -- }
       dashboard.section.buttons.val = {
         {
           type = "group",
@@ -82,13 +61,13 @@ return {
         },
         { type = "padding", val = 2 },
 
-        { type = "text", val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
+        { type = "text",    val = "Quick links", opts = { hl = "SpecialComment", position = "center" } },
         { type = "padding", val = 1 },
         -- dashboard.button("f", " " .. " Find file", LazyVim.pick()),
-        dashboard.button("n", " " .. " New file", [[<cmd> ene <BAR> startinsert <CR>]]),
+       dashboard.button("n", " " .. " New file", [[<cmd> ene <BAR> startinsert <CR>]]),
         -- dashboard.button("r", " " .. " Recent files", LazyVim.pick("oldfiles")),
         -- dashboard.button("g", " " .. " Find text", LazyVim.pick("live_grep")),
-        { type = "text", val = "-------", opts = { hl = "Comment", position = "center" } },
+        { type = "text",    val = "-------", opts = { hl = "Comment", position = "center" } },
         -- dashboard.button("c", " " .. " Config", LazyVim.pick.config_files()),
         dashboard.button("s", " " .. " Restore Session", [[<cmd> lua require('persistence').load() <CR>]]),
         dashboard.button("u", " " .. " Update plugins", "<cmd> Lazy sync <CR>"),
@@ -133,12 +112,12 @@ return {
           local stats = require("lazy").stats()
           local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
           dashboard.section.footer.val = "⚡ Neovim loaded "
-            .. stats.loaded
-            .. "/"
-            .. stats.count
-            .. " plugins in "
-            .. ms
-            .. "ms"
+              .. stats.loaded
+              .. "/"
+              .. stats.count
+              .. " plugins in "
+              .. ms
+              .. "ms"
           pcall(vim.cmd.AlphaRedraw)
         end,
       })
