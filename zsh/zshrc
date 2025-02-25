@@ -149,6 +149,7 @@ lsp_make_commands() {
 
     /usr/bin/cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
 }
+export PATH=$HOME/.fusion360:$PATH
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
