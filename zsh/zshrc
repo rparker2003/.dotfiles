@@ -137,6 +137,8 @@ export JIRA_URL="https://crankuptheamps.atlassian.net/"
 
 alias vi='nvim'
 
+export PATH=$HOME/.fusion360:$PATH
+
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
@@ -279,3 +281,10 @@ makebuild() {
     rm -rf * && cmake .. -DENABLE_ASSERT:STRING="ON" -DCMAKE_BUILD_TYPE:STRING="Debug" -DENABLE_DEV_LOG:STRING="ON" && make -j 8 install
 }
 
+
+# bun completions
+[ -s "/home/rparker/.bun/_bun" ] && source "/home/rparker/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
