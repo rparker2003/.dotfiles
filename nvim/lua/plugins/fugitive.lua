@@ -34,5 +34,9 @@ return {
 
     vim.keymap.set("n", "gu", "<cmd>diffget //2<CR>", { desc = "Git Diff Left" })
     vim.keymap.set("n", "gh", "<cmd>diffget //3<CR>", { desc = "Git Diff Right" })
+
+    vim.keymap.set("n", "<leader>gf", function()
+      vim.cmd("vertical Git log --stat -- " .. vim.fn.expand("%:p"))
+    end, { desc = "Git Log Stats on File" })
   end
 }
