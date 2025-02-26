@@ -33,3 +33,7 @@ vim/vim/plugged
 
 # Nvim version file
 nvim/lazyvim.json
+
+# hyprland wallpaper configs
+hypr/wallpaper_effects/
+hypr/wallust/wallust-hyprland.conf
