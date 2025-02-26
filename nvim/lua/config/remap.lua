@@ -31,13 +31,17 @@ vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without affect
 vim.keymap.set("i", "<C-c>", "<Esc>", { desc = "Ctrl+C as Esc in insert mode" })
 vim.keymap.set("n", "Q", "<nop>", { desc = "Disable Ex Mode" })
 
+vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true, desc = "Outdent and stay in visual mode" })
+vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true, desc = "Indent and stay in visual mode" })
+
 -- [[ search and replace ]] (one of my favorites, { desc = ""})
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
   { desc = "Serach and replace word under cursor" })
 
 -- [[ file management ]]
 vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.dotfiles/nvim/.config/nvim/<CR>", { desc = "Edit neovim config" })
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true }, { desc = "Make file executable" })
+vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Make file executable" })
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
 
 -- [[ Go-Lang error handling and logging ]]
 vim.keymap.set("n", "<leader>ee", "oif err != nil {<CR>}<Esc>Oreturn err<Esc>", { desc = "Insert Go error check" })
