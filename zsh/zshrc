@@ -206,6 +206,8 @@ export PATH=$HOME/gfs/bullseye/bullseye/9.9.6/bin:$PATH
 # export AMPS develop bin path for easy access to things like ampsErr
 export PATH=$HOME/ampsVersion/AMPS-develop-Release-Linux/bin:$PATH
 
+alias agrep=amps-grep
+
 # Pull down an AMPS release: ARG1 - version/label for release
 getamps() {
   local save_dir="$HOME/ampsVersion" # Set the target directory
