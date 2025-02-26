@@ -120,13 +120,13 @@ unalias ls 2>/dev/null
 unalias ll 2>/dev/null
 unalias lt 2>/dev/null
 ls() {
-  command eza -a --icons "$@"
+  command eza --icons "$@"
 }
 ll() {
-  command eza -al --icons "$@"
+  command eza --icons "$@"
 }
 lt() {
-  command eza -a --icons "$@"
+  command eza --icons "$@"
 }
 
 # === User configuration ===
