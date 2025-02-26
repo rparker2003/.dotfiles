@@ -33,3 +33,6 @@ vim/vim/plugged
 
 # Nvim version file
 nvim/lazyvim.json
+
+# zsh theme
+zsh/p10k.zsh
