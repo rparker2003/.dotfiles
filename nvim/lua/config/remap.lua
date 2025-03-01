@@ -36,7 +36,7 @@ vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true, desc = "Indent 
 
 -- [[ search and replace ]] (one of my favorites, { desc = ""})
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-  { desc = "Serach and replace word under cursor" })
+  { desc = "Search and replace word under cursor" })
 
 -- [[ file management ]]
 vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.dotfiles/nvim/.config/nvim/<CR>", { desc = "Edit neovim config" })
@@ -50,6 +50,9 @@ vim.keymap.set("n", "<leader>ef", 'oif err != nil {<CR>}<Esc>Olog.Fatalf("error:
   { desc = "Insert Go fatal error log" })
 vim.keymap.set("n", "<leader>el", 'oif err != nil {<CR>}<Esc>O.logger.Error("error", "error", err)<Esc>F.;i',
   { desc = "Insert Go structured error log" })
+
+-- [[ AMPS Logging ]]
+vim.keymap.set("n", "<leader>la", 'oamps_logger::LOG("%d %s", __LINE__, __func__);<Esc>', { desc = "Insert AMPS Logger" })
 
 -- [[ LSP and formatting ]]
 vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
@@ -67,3 +70,57 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highl
 
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+
+-- Build Keymap, looks towards root from current file for 'build' dir and runs make install in it
+vim.keymap.set('n', '<C-g>', function()
+  -- Check if the current buffer has unsaved changes
+  if vim.bo.modified then
+    print('Error: Save your changes before running the build command.')
+    return
+  end
+
+  -- Look up from cwd
+  local function find_build_dir()
+    local cwd = vim.fn.getcwd()
+    local path = cwd
+    while path ~= '/' do
+      local build_path = path .. '/build'
+      if vim.fn.isdirectory(build_path) == 1 then
+        return build_path
+      end
+      path = vim.fn.fnamemodify(path, ':h')
+    end
+    return nil
+  end
+
+  local build_dir = find_build_dir()
+  if not build_dir then
+    print('No build directory found')
+    return
+  end
+
+  local cmd = 'make -j $(nproc) install'
+  vim.cmd('botright split | resize 10 | terminal')
+  -- vim.cmd('startinsert')
+
+  -- Get terminal buffer and window
+  local term_win = vim.api.nvim_get_current_win()
+
+  -- Function to auto-scroll without inserting
+  local function auto_scroll()
+    if vim.api.nvim_win_is_valid(term_win) then
+      vim.api.nvim_win_call(term_win, function()
+        vim.cmd('normal! G') -- Scroll to bottom
+      end)
+    end
+  end
+
+  -- Run the make command
+  vim.fn.chansend(vim.b.terminal_job_id,
+    'cd ' .. build_dir .. ' && ' .. cmd .. ' && exit || read -p "Press enter to continue..."\n')
+
+  -- Periodically scroll without switching focus
+  vim.defer_fn(function()
+    auto_scroll()
+  end, 100)
+end, { noremap = true, silent = true })

@@ -1,10 +1,11 @@
 return {
   "folke/zen-mode.nvim",
   config = function()
+    -- fullscreen current pane
     vim.keymap.set("n", "<leader>zz", function()
       require("zen-mode").setup {
         window = {
-          width = 90,
+          width = 1.0,
           options = {}
         },
       }
@@ -13,7 +14,7 @@ return {
       vim.wo.number = true
       vim.wo.rnu = true
       ColorMyPencils()
-    end, { desc = "Toggle Zen Mode (90 width, line numbers)" })
+    end, { desc = "Toggle Zen Mode (max width, line numbers)" })
 
 
     vim.keymap.set("n", "<leader>zZ", function()
