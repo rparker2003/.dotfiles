@@ -66,5 +66,10 @@ return {
     }
 
     vim.treesitter.language.register("templ", "templ")
+
+    -- Toggle treesitter context on and off
+    vim.keymap.set("n", "<leader>tc", function()
+      require("treesitter-context").toggle()
+    end, { silent = true, desc = "Toggle Treesitter Context" })
   end,
 }

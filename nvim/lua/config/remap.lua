@@ -5,14 +5,9 @@ vim.g.maplocalleader = " "
 vim.keymap.set("n", "<leader>|", "<cmd>vs<CR>", { desc = "Vertical split" })
 vim.keymap.set("n", "<leader>-", "<cmd>sp<CR>", { desc = "Horizontal split" })
 
-vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left pane" })
-vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right pane" })
-vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower pane" })
-vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper pane" })
-
 -- [[ navigation ]]
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected line down" })
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected line up" })
+vim.keymap.set("v", "J", ":move '>+1<CR>gv=gv", { noremap = true, silent = true, desc = "Move selected line down" })
+vim.keymap.set("v", "K", ":move '<-2<CR>gv=gv", { noremap = true, silent = true, desc = "Move selected line up" })
 vim.keymap.set("n", "J", "mzJ`z", { desc = "Join line below" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up" })
@@ -39,17 +34,9 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
   { desc = "Search and replace word under cursor" })
 
 -- [[ file management ]]
-vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.dotfiles/nvim/.config/nvim/<CR>", { desc = "Edit neovim config" })
+vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.dotfiles/nvim/<CR>", { desc = "Edit neovim config" })
 vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Make file executable" })
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
-
--- [[ Go-Lang error handling and logging ]]
-vim.keymap.set("n", "<leader>ee", "oif err != nil {<CR>}<Esc>Oreturn err<Esc>", { desc = "Insert Go error check" })
-vim.keymap.set("n", "<leader>ea", 'oassert.NoError(err, "")<Esc>F";a', { desc = "Insert Go assert.NoError" })
-vim.keymap.set("n", "<leader>ef", 'oif err != nil {<CR>}<Esc>Olog.Fatalf("error: %s\\n", err.Error())<Esc>jj',
-  { desc = "Insert Go fatal error log" })
-vim.keymap.set("n", "<leader>el", 'oif err != nil {<CR>}<Esc>O.logger.Error("error", "error", err)<Esc>F.;i',
-  { desc = "Insert Go structured error log" })
 
 -- [[ AMPS Logging ]]
 vim.keymap.set("n", "<leader>la", 'oamps_logger::LOG("%d %s", __LINE__, __func__);<Esc>', { desc = "Insert AMPS Logger" })
@@ -101,7 +88,6 @@ vim.keymap.set('n', '<C-g>', function()
 
   local cmd = 'make -j $(nproc) install'
   vim.cmd('botright split | resize 10 | terminal')
-  -- vim.cmd('startinsert')
 
   -- Get terminal buffer and window
   local term_win = vim.api.nvim_get_current_win()
