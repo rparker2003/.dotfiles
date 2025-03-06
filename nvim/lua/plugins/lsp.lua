@@ -33,6 +33,7 @@ return {
       ensure_installed = {
         "lua_ls",
         "rust_analyzer",
+        "clangd",
       },
       handlers = {
         function(server_name) -- default handler (optional)
@@ -69,6 +70,13 @@ return {
               }
             }
           }
+        end,
+        ["clangd"] = function()
+          local lspconfig = require("lspconfig")
+          lspconfig.clangd.setup({
+            capabilities = capabilities,
+            cmd = { "clangd", "--background-index", "--pch-storage=memory", "--completion-style=detailed", "--clang-tidy" },
+          })
         end,
       }
     })
