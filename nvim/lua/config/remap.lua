@@ -46,6 +46,9 @@ vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>", { desc = "Restart LSP"
 vim.keymap.set("n", "<leader>f", function()
   vim.lsp.buf.format({ async = true })
 end, { desc = "Format file with LSP" })
+vim.keymap.set("v", "<leader>f", function()
+  vim.lsp.buf.format({ async = true })
+end, { desc = "Format selected content with LSP" })
 
 -- source current file
 vim.keymap.set("n", "<leader><leader>", function()
@@ -86,6 +89,9 @@ vim.keymap.set('n', '<C-g>', function()
     return
   end
 
+  -- Save current window before opening the terminal
+  local original_win = vim.api.nvim_get_current_win()
+
   local cmd = 'make -j $(nproc) install'
   vim.cmd('botright split | resize 10 | terminal')
 
@@ -104,6 +110,9 @@ vim.keymap.set('n', '<C-g>', function()
   -- Run the make command
   vim.fn.chansend(vim.b.terminal_job_id,
     'cd ' .. build_dir .. ' && ' .. cmd .. ' && exit || read -p "Press enter to continue..."\n')
+
+  -- Switch back to the original window
+  vim.api.nvim_set_current_win(original_win)
 
   -- Periodically scroll without switching focus
   vim.defer_fn(function()

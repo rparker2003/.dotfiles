@@ -33,7 +33,7 @@ return {
       ensure_installed = {
         "lua_ls",
         "rust_analyzer",
-        "clangd",
+        -- "clangd",
       },
       handlers = {
         function(server_name) -- default handler (optional)
@@ -78,6 +78,19 @@ return {
             cmd = { "clangd", "--background-index", "--pch-storage=memory", "--completion-style=detailed", "--clang-tidy" },
           })
         end,
+      }
+    })
+
+    -- Manually configure ccls (not supported by Mason)
+    local lspconfig = require("lspconfig")
+    lspconfig.ccls.setup({
+      capabilities = capabilities,
+      init_options = {
+        cache = {
+          directory = ".ccls-cache"
+        },
+        highlight = { lsRanges = true },
+        compilationDatabaseDirectory = "build",
       }
     })
 

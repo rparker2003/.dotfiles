@@ -103,7 +103,7 @@ source $ZSH/oh-my-zsh.sh
 # fastfetch. Will be disabled if above colorscript was chosen to install
 #fastfetch -c $HOME/.config/fastfetch/config-compact.jsonc
 
-PATH="$HOME/bin/fzf:$PATH"
+PATH="$HOME/bin/:$PATH"
 
 # Set-up FZF key bindings (CTRL R for fuzzy history finder)
 source <(fzf --zsh)
@@ -134,10 +134,20 @@ lt() {
 # === User configuration ===
 # export MANPATH="/usr/local/man:$MANPATH"
 
-# set jira url to be used by jira plugin
-export JIRA_URL="https://crankuptheamps.atlassian.net/"
-
 alias vi='nvim'
+
+# Use local make for compile_commands.json LSP support
+lsp_make_commands() {
+    # Ensure we're in the "build" directory
+    if [[ "${PWD##*/}" != "build" ]]; then
+        echo "Error: This script must be run from a directory named 'build'."
+        return 1
+    fi
+
+    # Proceed with the build process
+
+    /usr/bin/cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+}
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -159,10 +169,6 @@ alias vi='nvim'
 # - $ZSH_CUSTOM/aliases.zsh
 # - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 
 # User specific environment
 if [[ ! "$PATH" =~ "$HOME/.local/bin" && ! "$PATH" =~ "$HOME/bin" ]]; then
@@ -193,10 +199,11 @@ if command -v pyenv >/dev/null 2>&1; then
 fi
 
 
-export PATH="$HOME/.lazygit/:$PATH"
-
 # === AMPS Path/Executables ===
-## cmake for amps build
+# set jira url to be used by jira plugin
+export JIRA_URL="https://crankuptheamps.atlassian.net/"
+
+# cmake for amps build
 export PATH=$HOME/gfs/oss/cmake/2.8.1/bin:$PATH
 
 # set COVFILE for bullseye coverage
