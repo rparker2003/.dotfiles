@@ -7,7 +7,7 @@ vim.opt.scrolloff = 8         -- scroll when 8 lines away from edge
 
 vim.opt.cursorline = true     -- highlight line where cursor is located
 vim.opt.signcolumn = "yes"    -- always enable sign column to left of nums
-vim.opt.colorcolumn = "80"    -- highlight column at 80 chars as line ref point
+-- vim.opt.colorcolumn = "80"    -- highlight column at 80 chars as line ref point
 vim.opt.wrap = false          -- let lines wrap to next line
 
 vim.opt.guicursor = ""        -- disable cursor shape changen in insert/visual
