@@ -40,10 +40,3 @@ zsh/p10k.zsh
 # hyprland wallpaper configs
 hypr/wallpaper_effects/
 hypr/wallust/wallust-hyprland.conf
-
-# zsh theme
-zsh/p10k.zsh
-
-# hyprland wallpaper configs
-hypr/wallpaper_effects/
-hypr/wallust/wallust-hyprland.conf
