@@ -61,6 +61,30 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highl
 -- Diagnostic keymaps
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
+-- Switch between .hpp and .cpp file counterparts
+vim.keymap.set("n", "<leader>h", function()
+  local current_file = vim.fn.expand('%:p') -- Get the full path of the current file
+  local switch_file
+
+  -- Check if we're in a .cpp or .hpp file and toggle accordingly
+  if current_file:match("%.cpp$") then
+    switch_file = current_file:gsub("%.cpp$", ".hpp")
+  elseif current_file:match("%.hpp$") then
+    switch_file = current_file:gsub("%.hpp$", ".cpp")
+  else
+    print("Not a .cpp or .hpp file!")
+    return
+  end
+
+  -- Check if the corresponding file exists
+  if vim.fn.filereadable(switch_file) == 1 then
+    vim.cmd("e " .. switch_file)
+  else
+    print("No corresponding file found!")
+  end
+end, { desc = "Toggle between .cpp and .hpp files" })
+
+
 -- Build Keymap, looks towards root from current file for 'build' dir and runs make install in it
 vim.keymap.set('n', '<C-g>', function()
   -- Check if the current buffer has unsaved changes

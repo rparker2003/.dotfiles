@@ -125,10 +125,10 @@ ls() {
   command eza --icons "$@"
 }
 ll() {
-  command eza --icons "$@"
+  command eza -l --icons "$@"
 }
 lt() {
-  command eza --icons "$@"
+  command eza --tree --level=1 --icons "$@"
 }
 
 # === User configuration ===

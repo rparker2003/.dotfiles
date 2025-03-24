@@ -35,22 +35,22 @@ return {
     vim.keymap.set("n", "<leader>pL", ":Telescope lsp_workspace_symbols<CR>", { desc = "List LSP symbols in workspace" })
 
     -- Incoming and Outgoing calls
-    vim.keymap.set("n", "<leader>pci", function()
+    vim.keymap.set("n", "<leader>ci", function()
       require('telescope.builtin').lsp_incoming_calls()
     end, { desc = "Show incoming calls (who calls this function)" })
-    vim.keymap.set("n", "<leader>pco", function()
+    vim.keymap.set("n", "<leader>co", function()
       require('telescope.builtin').lsp_outgoing_calls()
     end, { desc = "Show outgoing calls (functions this calls)" })
 
     -- Jump to definitions
-    vim.keymap.set("n", "<leader>pcf", function()
+    vim.keymap.set("n", "<leader>cf", function()
       vim.lsp.buf.definition()
     end, { desc = "Jump to function definition" })
-    vim.keymap.set("n", "<leader>pct", function()
+    vim.keymap.set("n", "<leader>ct", function()
       vim.lsp.buf.type_definition()
     end, { desc = "Jump to type definition" })
 
-    vim.keymap.set("n", "<leader>pcr", function()
+    vim.keymap.set("n", "<leader>cr", function()
       require('telescope.builtin').lsp_references()
     end, { desc = "Show function references" })
 

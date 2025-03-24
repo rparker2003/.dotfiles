@@ -1,6 +1,7 @@
 -- Create helper functions for autogroups and autocommands
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
+local usercmd = vim.api.nvim_create_user_command
 
 -- Define custom autogroups
 local yank_group = augroup("HighlightYank", {})
@@ -25,12 +26,47 @@ autocmd("TextYankPost", {
   end,
 })
 
+-- Set up file type specific configs
+autocmd("FileType", {
+  group = format_group,
+  pattern = "*",
+  callback = function()
+    local ext = vim.bo.filetype
+
+    -- Disable trim trailing whitespace for C++ files (AMPS)
+    if vim.b.trim_whitespace == nil then
+      if ext == "cpp" or ext == "hpp" then
+        vim.b.trim_whitespace = false
+      else
+        vim.b.trim_whitespace = true
+      end
+    end
+
+    -- Auto set indentation for filetypes
+    if ext == "python" then
+      set_indent(4) -- call to set_indent in set.lua
+    else
+      set_indent(2)
+    end
+  end
+})
+
 -- Trim trailing whitespace before saving a file
 autocmd({ "BufWritePre" }, {
   group = format_group,
   pattern = "*",
-  command = [[%s/\s\+$//e]],
+  callback = function()
+    if vim.b.trim_whitespace then
+      vim.cmd([[%s/\s\+$//e]])
+    end
+  end
 })
+
+-- Toggle trimming for current buffer
+usercmd("TrimToggle", function()
+  vim.b.trim_whitespace = not vim.b.trim_whitespace
+  print("Trim trailing whitespace for this buffer: " .. (vim.b.trim_whitespace and "ON" or "OFF"))
+end, {})
 
 -- Set up keymaps when LSP atatches to a buffer
 autocmd("LspAttach", {

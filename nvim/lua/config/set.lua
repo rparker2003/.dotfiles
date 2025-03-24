@@ -7,24 +7,21 @@ vim.opt.scrolloff = 8         -- scroll when 8 lines away from edge
 
 vim.opt.cursorline = true     -- highlight line where cursor is located
 vim.opt.signcolumn = "yes"    -- always enable sign column to left of nums
--- vim.opt.colorcolumn = "80"    -- highlight column at 80 chars as line ref point
 vim.opt.wrap = false          -- let lines wrap to next line
 
 vim.opt.guicursor = ""        -- disable cursor shape changen in insert/visual
 
-
 -- [[ Indentation Settings ]]
-local function set_indent(width)
-  vim.opt.shiftwidth = width  -- number of spaces for auto-indent
-  vim.opt.tabstop = width     -- number of spaces that a tab char represents
-  vim.opt.softtabstop = width -- number of spaces used for tab completion
+_G.set_indent = function(width) -- Global set indent function, called by autocmds.lua
+  vim.opt.shiftwidth = width    -- number of spaces for auto-indent
+  vim.opt.tabstop = width       -- number of spaces that a tab char represents
+  vim.opt.softtabstop = width   -- number of spaces used for tab completion
 end
-set_indent(2)                 -- set indentation width to 2 spaces
 
-vim.opt.expandtab = true      -- expand tabs into spaces
+vim.opt.expandtab = true   -- expand tabs into spaces
 
-vim.opt.smartindent = true    -- enable smart indent
-vim.opt.breakindent = true    -- enable automatic wrapping of indented lines
+vim.opt.smartindent = true -- enable smart indent
+vim.opt.breakindent = true -- enable automatic wrapping of indented lines
 
 -- [[ File Handling ]]
 vim.opt.swapfile = false                               -- Disable swap files
