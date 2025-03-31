@@ -13,3 +13,6 @@
 [submodule "zsh/themes/powerlevel10k"]
 	path = zsh/themes/powerlevel10k
 	url = https://github.com/romkatv/powerlevel10k.git
+[submodule "zsh/plugins/you-should-use"]
+	path = zsh/plugins/you-should-use
+	url = https://github.com/MichaelAquilina/zsh-you-should-use

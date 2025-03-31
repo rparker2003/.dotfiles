@@ -29,6 +29,12 @@ vim.keymap.set("n", "Q", "<nop>", { desc = "Disable Ex Mode" })
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true, desc = "Outdent and stay in visual mode" })
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true, desc = "Indent and stay in visual mode" })
 
+-- inc/dec remap in normal/v-block modes
+vim.api.nvim_set_keymap('n', '<C-i>', '<C-a>', { noremap = true, silent = true }) -- C-a conflicts with tmux
+vim.api.nvim_set_keymap('x', '<C-i>', '<C-a>', { noremap = true, silent = true }) -- C-a conflicts with tmux
+vim.api.nvim_set_keymap('n', '<C-x>', '<C-x>', { noremap = true, silent = true })
+vim.api.nvim_set_keymap('x', '<C-x>', '<C-x>', { noremap = true, silent = true })
+
 -- [[ search and replace ]] (one of my favorites, { desc = ""})
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
   { desc = "Search and replace word under cursor" })
@@ -39,7 +45,9 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc =
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
 
 -- [[ AMPS Logging ]]
-vim.keymap.set("n", "<leader>la", 'oamps_logger::LOG("%d %s", __LINE__, __func__);<Esc>', { desc = "Insert AMPS Logger" })
+vim.keymap.set("n", "<leader>la",
+  'oamps_logger::LOG("%d %s - %s", __LINE__, __func__, strrchr(__FILE__, \'/\') + 1);<Esc>',
+  { desc = "Insert AMPS Logger" })
 
 -- [[ LSP and formatting ]]
 vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
