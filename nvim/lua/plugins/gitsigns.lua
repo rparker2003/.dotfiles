@@ -18,7 +18,7 @@ return {
       current_line_blame_opts = {
         virt_text = true,
         virt_text_pos = 'eol',
-        delay = 1000,
+        delay = 3000,  -- 1000 would cause gitblame errors when jumping quickly through large files
         ignore_whitespace = false,
       },
       on_attach = function(buffer)

@@ -25,6 +25,13 @@ return {
       },
     })
 
+    -- custom filetype icon
+    require("nvim-web-devicons").set_icon({
+      test = { icon = "", color = "#FFBC03", name = "Python" },
+      stage = { icon = "", color = "#FFBC03", name = "Python" },
+      stress = { icon = "", color = "#FFBC03", name = "Python" },
+    })
+
     -- Global Keymaps for Oil
     vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open Oil File Explorer" }) -- Press `-` to open Oil
   end,

@@ -12,7 +12,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 zstyle ':omz:update' mode auto  # update automatically without asking
-# ENABLE_CORRECTION="true"        # auto command correction
+ENABLE_CORRECTION="true"        # auto command correction
 COMPLETION_WAITING_DOTS="true"  # command completion dots
 
 export ZSH_CUSTOM="$HOME/.dotfiles/zsh"
@@ -100,7 +100,7 @@ getamps() {
     [[ $ver == 'develop' && -e "$save_dir/${release_name}/bin/ampServer" ]] && rm -rf "$save_dir/${release_name}"
 
     if [ ! -e "$save_dir/${release_name}/bin/ampServer" ]; then
-      wget -P "$save_dir" "http://devnull.crankuptheamps.com/releases/amps/${ver}/${release_name}.tar.gz" &&
+      wget -P "$save_dir" "https://devnull.crankuptheamps.com/releases/amps/${ver}/${release_name}.tar.gz" &&
         tar --directory="$save_dir" -xvf "$save_dir/${release_name}.tar.gz" &&
         echo "$save_dir/${release_name}.tar.gz" &&
         rm -rf "$save_dir/${release_name}.tar.gz" # Remove the tar.gz file after extraction
@@ -121,7 +121,7 @@ getdebug() {
     [[ $ver == 'develop' && -e "$save_dir/${release_name}/bin/ampServer" ]] && rm -rf "$save_dir/${release_name}"
 
     if [ ! -e "$save_dir/${release_name}/bin/ampServer" ]; then
-      wget -P "$save_dir" "http://devnull.crankuptheamps.com/releases/amps/${ver}/${release_name}.tar.gz" &&
+      wget -P "$save_dir" "https://devnull.crankuptheamps.com/releases/amps/${ver}/${release_name}.tar.gz" &&
         tar --directory="$save_dir" -xvf "$save_dir/${release_name}.tar.gz" &&
         rm -rf "$save_dir/${release_name}.tar.gz" # Remove the tar.gz file after extraction
     fi
@@ -149,7 +149,7 @@ runfitdebug () {
   time ./fit -a ${executable} "$@"
 }
 
-makebuild() {
+makedebug() {
     # Ensure we're in the "build" directory
     if [[ "${PWD##*/}" != "build" ]]; then
         echo "Error: This script must be run from a directory named 'build'."
@@ -157,7 +157,18 @@ makebuild() {
     fi
 
     # Proceed with the build process
-    rm -rf * && cmake .. -DENABLE_ASSERT:STRING="ON" -DCMAKE_BUILD_TYPE:STRING="Debug" -DENABLE_DEV_LOG:STRING="ON" && make -j 8 install
+    rm -rf * && cmake .. -DCMAKE_BUILD_TYPE:STRING="Debug" -DENABLE_DEV_LOG:BOOL="ON" && ccmake . && make -j $(nproc) install
+}
+
+makerelease() {
+    # Ensure we're in the "build" directory
+    if [[ "${PWD##*/}" != "build" ]]; then
+        echo "Error: This script must be run from a directory named 'build'."
+        return 1
+    fi
+
+    # Proceed with the build process
+    rm -rf * && cmake .. -DENABLE_COLOR_GCC:BOOL="OFF" -DENABLE_PLATFORM_COMPAT:BOOL="ON" && ccmake . && make -j $(nproc) install
 }
 
 lsp_make_commands() { # compile_commands.json LSP support
@@ -169,4 +180,27 @@ lsp_make_commands() { # compile_commands.json LSP support
 
     # Proceed with the build process
     /usr/bin/cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON ..
+}
+
+png_server() {
+  ~/gfs/sixty/projects/daniel/scripts/png_gallery.py "${1:-.}"
+}
+
+getartifacts() {
+  local url="$1"
+  local artifact_name=$(basename "$url")
+
+  wget -q "$url" || { echo "Download failed"; return 1; }
+
+  tar -xvf "$artifact_name" || { echo "Extraction failed"; return 1; }
+
+  if [[ "$artifact_name" == fit-artifacts.* ]]; then
+    echo "Fit artifact detected. Failures extracting..."
+    cd fit-artifacts/failures
+    tar -xvf * || { echo "Failure extraction failed"; return 1; }
+    rm *.tar.gz
+    cd ../../
+  fi
+
+  rm "$artifact_name"
 }

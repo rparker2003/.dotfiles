@@ -30,7 +30,7 @@ vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir" -- Set undo dir
 vim.opt.undofile = true                                -- Enable persistend undo
 
 -- [[ Seach Settings ]]
-vim.opt.hlsearch = false -- disable highlithing of search matches
+vim.opt.hlsearch = true -- disable highlithing of search matches
 vim.opt.incsearch = true -- enable incremental search
 
 -- Case-insensitive searching UNLESS \C or 1+ capital letters in the search term

@@ -151,3 +151,9 @@ vim.keymap.set('n', '<C-g>', function()
     auto_scroll()
   end, 100)
 end, { noremap = true, silent = true })
+
+-- Toggle relative lines on or off
+vim.keymap.set("n", "<leader>rl", function()
+  vim.wo.relativenumber = not vim.wo.relativenumber
+
+end, { desc = "Toggle relative line nums." })

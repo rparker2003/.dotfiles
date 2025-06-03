@@ -98,10 +98,10 @@ autocmd("LspAttach", {
       vim.lsp.buf.signature_help()
     end, opts)
     vim.keymap.set("n", "[d", function()
-      vim.diagnostic.goto_next()
+      vim.diagnostic.goto_prev()
     end, opts)
     vim.keymap.set("n", "]d", function()
-      vim.diagnostic.goto_prev()
+      vim.diagnostic.goto_next()
     end, opts)
   end,
 })
@@ -115,6 +115,19 @@ autocmd("BufReadPost", {
     if last_line > 1 and last_line <= total_lines then
       vim.cmd("normal! g`\"")
       vim.fn.timer_start(1, function() vim.cmd("normal! zz") end)
+    end
+  end,
+})
+
+-- Set inactive buffer color
+autocmd({ "WinEnter", "WinLeave", "BufEnter" }, {
+  callback = function()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+      if vim.api.nvim_get_current_win() == win then
+        vim.api.nvim_win_set_option(win, 'winhighlight', 'Normal:Normal')
+      else
+        vim.api.nvim_set_hl(0, 'NormalNC', { bg = "#0e0e12" })
+      end
     end
   end,
 })
