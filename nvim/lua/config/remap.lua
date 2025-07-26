@@ -45,9 +45,8 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc =
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
 
 -- [[ AMPS Logging ]]
-vim.keymap.set("n", "<leader>la",
-  'oamps_logger::LOG("%d %s - %s", __LINE__, __func__, strrchr(__FILE__, \'/\') + 1);<Esc>',
-  { desc = "Insert AMPS Logger" })
+vim.keymap.set("n", "<leader>la", 'oamps_logger::LOG("%d %s", __LINE__, __func__);<Esc>', { desc = "Insert AMPS Logger" })
+vim.keymap.set("n", "<leader>lA",  'oamps_logger::LOG("%d %s - %s", __LINE__, __func__, strrchr(__FILE__, \'/\') + 1);<Esc>', { desc = "Insert AMPS Logger (DETAILED)" })
 
 -- [[ LSP and formatting ]]
 vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
@@ -155,5 +154,69 @@ end, { noremap = true, silent = true })
 -- Toggle relative lines on or off
 vim.keymap.set("n", "<leader>rl", function()
   vim.wo.relativenumber = not vim.wo.relativenumber
-
 end, { desc = "Toggle relative line nums." })
+
+-- AMPS Client Code snippets
+local snippets = {
+  p = {
+    "# Python",
+    "from AMPS import *",
+    "",
+    "client = Client(\"my-application\")",
+    "uri = 'tcp://localhost:9007/amps/json'",
+    "topic = 'sow_topic'",
+    "",
+    "try:",
+    "    client.connect(uri)",
+    "    client.logon()",
+    "",
+    "    cmd = Command('sow').set_topic(topic)",
+    "",
+    "    for m in client.execute(cmd):",
+    "        if m.get_command() == 'sow':",
+    "            print(m.get_data())",
+    "",
+    "except Exception as e:",
+    "    print(e)"
+  },
+  c = {
+    "// C++",
+    "#include <amps.h>",
+    "#include <iostream>",
+    "...",
+    "int main()",
+    "{",
+    "  AMPS::Client client(\"my-application\");",
+    "  std::string uri = \"tcp://localhost:9007/amps/json\";",
+    "  std::string topic = \"sow_topic\";",
+    "",
+    "  try",
+    "  {",
+    "    client.connect(uri);",
+    "    client.logon();",
+    "",
+    "    AMPS::Command cmd(\"sow\").setTopic(topic);",
+    "",
+    "    for (auto msg : client.execute(cmd))",
+    "    {",
+    "      if (msg.getCommand() == \"sow\")",
+    "      {",
+    "        std::cout << msg.getData() << std::endl;",
+    "      }",
+    "    }",
+    "  } catch (Exception &e) {",
+    "    std::cerr << e.what() << std::endl;",
+    "    return -1;",
+    "  }",
+    "  return 0;",
+    "}"
+  }
+}
+
+vim.keymap.set("n", "<leader>Sp", function()
+  vim.api.nvim_put(snippets['p'], "l", true, true)
+end, { desc = "Python AMPS Snippet"})
+
+vim.keymap.set("n", "<leader>Sc", function()
+  vim.api.nvim_put(snippets['c'], "l", true, true)
+end, { desc = "C++ AMPS Snippet"})
