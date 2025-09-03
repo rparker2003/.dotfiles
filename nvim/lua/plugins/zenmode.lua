@@ -20,16 +20,15 @@ return {
     vim.keymap.set("n", "<leader>zZ", function()
       require("zen-mode").setup {
         window = {
-          width = 80,
+          width = 0.5,
           options = {}
         },
       }
       require("zen-mode").toggle()
       vim.wo.wrap = false
-      vim.wo.number = false
-      vim.wo.rnu = false
-      vim.opt.colorcolumn = "0"
+      vim.wo.number = true
+      vim.wo.rnu = true
       ColorMyPencils()
-    end, { desc = "Toggle Zen Mode (80 width, no line numbers)" })
+    end, { desc = "Toggle Zen Mode (50% width)" })
   end
 }

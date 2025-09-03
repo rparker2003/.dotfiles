@@ -37,5 +37,8 @@ return {
         winhighlight = false,                -- Auto highlighting for focussed/unfocussed windows
       }
     })
+
+    vim.keymap.set("n", "<leader>F", "<cmd>FocusToggle<cr>", { desc = "Toggle Focus" })
+
   end,
 }

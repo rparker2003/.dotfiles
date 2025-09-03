@@ -45,8 +45,19 @@ vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc =
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
 
 -- [[ AMPS Logging ]]
-vim.keymap.set("n", "<leader>la", 'oamps_logger::LOG("%d %s", __LINE__, __func__);<Esc>', { desc = "Insert AMPS Logger" })
-vim.keymap.set("n", "<leader>lA",  'oamps_logger::LOG("%d %s - %s", __LINE__, __func__, strrchr(__FILE__, \'/\') + 1);<Esc>', { desc = "Insert AMPS Logger (DETAILED)" })
+vim.keymap.set("n", "<leader>la", function()
+  local indent = string.rep(" ", vim.fn.indent("."))
+  local logger = {
+    indent .. 'amps_logger::LOG("%d %s",',
+    indent .. '                 __LINE__,',
+    indent .. '                 __func__);',
+  }
+  vim.fn.append(vim.fn.line("."), logger)
+  vim.cmd("normal! j==") -- move cursor to first line of log and auto-indent
+end, { desc = "Insert formatted AMPS logger" })
+vim.keymap.set("n", "<leader>lA",
+  'oamps_logger::LOG("%d %s - %s", __LINE__, __func__, strrchr(__FILE__, \'/\') + 1);<Esc>',
+  { desc = "Insert AMPS Logger (DETAILED)" })
 
 -- [[ LSP and formatting ]]
 vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
@@ -157,66 +168,16 @@ vim.keymap.set("n", "<leader>rl", function()
 end, { desc = "Toggle relative line nums." })
 
 -- AMPS Client Code snippets
-local snippets = {
-  p = {
-    "# Python",
-    "from AMPS import *",
-    "",
-    "client = Client(\"my-application\")",
-    "uri = 'tcp://localhost:9007/amps/json'",
-    "topic = 'sow_topic'",
-    "",
-    "try:",
-    "    client.connect(uri)",
-    "    client.logon()",
-    "",
-    "    cmd = Command('sow').set_topic(topic)",
-    "",
-    "    for m in client.execute(cmd):",
-    "        if m.get_command() == 'sow':",
-    "            print(m.get_data())",
-    "",
-    "except Exception as e:",
-    "    print(e)"
-  },
-  c = {
-    "// C++",
-    "#include <amps.h>",
-    "#include <iostream>",
-    "...",
-    "int main()",
-    "{",
-    "  AMPS::Client client(\"my-application\");",
-    "  std::string uri = \"tcp://localhost:9007/amps/json\";",
-    "  std::string topic = \"sow_topic\";",
-    "",
-    "  try",
-    "  {",
-    "    client.connect(uri);",
-    "    client.logon();",
-    "",
-    "    AMPS::Command cmd(\"sow\").setTopic(topic);",
-    "",
-    "    for (auto msg : client.execute(cmd))",
-    "    {",
-    "      if (msg.getCommand() == \"sow\")",
-    "      {",
-    "        std::cout << msg.getData() << std::endl;",
-    "      }",
-    "    }",
-    "  } catch (Exception &e) {",
-    "    std::cerr << e.what() << std::endl;",
-    "    return -1;",
-    "  }",
-    "  return 0;",
-    "}"
-  }
-}
+local snippets = require("config.snippets")
 
-vim.keymap.set("n", "<leader>Sp", function()
-  vim.api.nvim_put(snippets['p'], "l", true, true)
-end, { desc = "Python AMPS Snippet"})
+vim.keymap.set("n", "<leader>Sa", function()
+  vim.api.nvim_put(snippets['amps_config'], "l", true, true)
+end, { desc = "AMPS Config Snippet" })
 
 vim.keymap.set("n", "<leader>Sc", function()
-  vim.api.nvim_put(snippets['c'], "l", true, true)
-end, { desc = "C++ AMPS Snippet"})
+  vim.api.nvim_put(snippets['cpp'], "l", true, true)
+end, { desc = "C++ AMPS Snippet" })
+
+vim.keymap.set("n", "<leader>Sp", function()
+  vim.api.nvim_put(snippets['python'], "l", true, true)
+end, { desc = "Python AMPS Snippet" })
