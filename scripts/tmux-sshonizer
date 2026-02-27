@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # List of SSH hosts (customize this with your actual hosts)
-hosts=("prowl")
+hosts=("prowl" "wheelie")
 
 # Use fzf to pick an SSH target
 ssh_target=$(printf "%s\n" "${hosts[@]}" | fzf)

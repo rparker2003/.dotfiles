@@ -171,13 +171,30 @@ end, { desc = "Toggle relative line nums." })
 local snippets = require("config.snippets")
 
 vim.keymap.set("n", "<leader>Sa", function()
-  vim.api.nvim_put(snippets['amps_config'], "l", true, true)
+  vim.api.nvim_put(snippets['amps_config'], "l", false, false)
 end, { desc = "AMPS Config Snippet" })
 
 vim.keymap.set("n", "<leader>Sc", function()
-  vim.api.nvim_put(snippets['cpp'], "l", true, true)
+  vim.api.nvim_put(snippets['cpp'], "l", false, false)
 end, { desc = "C++ AMPS Snippet" })
 
+vim.keymap.set("n", "<leader>SC", function()
+  vim.api.nvim_put(snippets['csharp'], "l", false, false)
+end, { desc = "CSharp AMPS Snippet" })
+
+vim.keymap.set("n", "<leader>SJ", function()
+  vim.api.nvim_put(snippets['java'], "l", false, false)
+end, { desc = "Java AMPS Snippet" })
+
+vim.keymap.set("n", "<leader>Sj", function()
+  vim.api.nvim_put(snippets['js'], "l", false, false)
+end, { desc = "JavaScript AMPS Snippet" })
+
 vim.keymap.set("n", "<leader>Sp", function()
-  vim.api.nvim_put(snippets['python'], "l", true, true)
+  vim.api.nvim_put(snippets['python'], "l", false, false)
 end, { desc = "Python AMPS Snippet" })
+
+-- Taskset Fit Snippet
+vim.keymap.set("n", "<leader>St", function()
+  vim.api.nvim_put(snippets['taskset'], "l", false, false)
+end, { desc = "Taskset Fit Snippet"})
