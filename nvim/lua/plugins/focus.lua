@@ -38,7 +38,7 @@ return {
       }
     })
 
-    vim.keymap.set("n", "<leader>F", "<cmd>FocusToggle<cr>", { desc = "Toggle Focus" })
+    vim.keymap.set("n", "<leader>tf", "<cmd>FocusToggle<cr>", { desc = "Toggle Focus" })
 
   end,
 }

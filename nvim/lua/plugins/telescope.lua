@@ -28,7 +28,6 @@ return {
     vim.keymap.set('n', '<leader>ps', function()
       builtin.grep_string({ search = vim.fn.input("Grep > ") })
     end, { desc = "Grep Custom String" })
-    vim.keymap.set('n', '<leader>vh', builtin.help_tags, { desc = "View Help Tags" })
 
     -- List LSP symbols
     vim.keymap.set("n", "<leader>pl", ":Telescope lsp_document_symbols<CR>", { desc = "List LSP symbols in file" })
@@ -47,13 +46,15 @@ return {
       vim.lsp.buf.definition()
     end, { desc = "Jump to function definition" })
     vim.keymap.set("n", "<leader>ct", function()
+      vim.lsp.buf.hover()
+    end, { desc = "Show type definition" })
+    vim.keymap.set("n", "<leader>cT", function()
       vim.lsp.buf.type_definition()
     end, { desc = "Jump to type definition" })
 
     vim.keymap.set("n", "<leader>cr", function()
       require('telescope.builtin').lsp_references()
     end, { desc = "Show function references" })
-
 
   end
 }

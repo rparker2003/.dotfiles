@@ -19,8 +19,8 @@ vim.keymap.set("n", "<leader>k", "<cmd>lnext<CR>zz", { desc = "Location list nex
 vim.keymap.set("n", "<leader>j", "<cmd>lprev<CR>zz", { desc = "Location list prev" })
 
 -- [[ clipboard and editing ]]
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
-vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank line to system clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank Line to NVIM Clipboard" })
+vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "Yank Line to System Clipboard" })
 vim.keymap.set("x", "<leader>p", [["_dP]], { desc = "Paste without overwriting register" })
 vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without affecting register" })
 vim.keymap.set("i", "<C-c>", "<Esc>", { desc = "Ctrl+C as Esc in insert mode" })
@@ -40,8 +40,7 @@ vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><
   { desc = "Search and replace word under cursor" })
 
 -- [[ file management ]]
-vim.keymap.set("n", "<leader>vpp", "<cmd>e ~/.dotfiles/nvim/<CR>", { desc = "Edit neovim config" })
-vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "Make file executable" })
+vim.keymap.set("n", "<leader>nvim", "<cmd>e ~/.dotfiles/nvim/<CR>", { desc = "Edit neovim config" })
 vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
 
 -- [[ AMPS Logging ]]
@@ -60,13 +59,27 @@ vim.keymap.set("n", "<leader>lA",
   { desc = "Insert AMPS Logger (DETAILED)" })
 
 -- [[ LSP and formatting ]]
-vim.keymap.set("n", "<leader>zig", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
+vim.keymap.set("n", "<leader>cR", "<cmd>LspRestart<cr>", { desc = "Restart LSP" })
 vim.keymap.set("n", "<leader>f", function()
-  vim.lsp.buf.format({ async = true })
-end, { desc = "Format file with LSP" })
-vim.keymap.set("v", "<leader>f", function()
-  vim.lsp.buf.format({ async = true })
-end, { desc = "Format selected content with LSP" })
+  if vim.bo.filetype ~= "python" then
+    return
+  end
+  require("conform").format({
+    async = true,
+    lsp_format = "never",
+    formatters = { "autopep8" },
+  })
+end, { desc = "Format Python file" })
+vim.keymap.set("x", "<leader>f", function()
+  if vim.bo.filetype ~= "cpp" then
+    return
+  end
+  require("conform").format({
+    async = true,
+    lsp_format = "never",
+    formatters = { "clang-format" },
+  })
+end, { desc = "Format C++ selection" })
 
 -- source current file
 vim.keymap.set("n", "<leader><leader>", function()
@@ -75,9 +88,6 @@ end, { desc = "Source current file" })
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
-
--- Diagnostic keymaps
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 -- Switch between .hpp and .cpp file counterparts
 vim.keymap.set("n", "<leader>h", function()
@@ -100,7 +110,7 @@ vim.keymap.set("n", "<leader>h", function()
   else
     print("No corresponding file found!")
   end
-end, { desc = "Toggle between .cpp and .hpp files" })
+end, { desc = "Switch to Header/Src (C++)" })
 
 
 -- Build Keymap, looks towards root from current file for 'build' dir and runs make install in it
@@ -111,16 +121,27 @@ vim.keymap.set('n', '<C-g>', function()
     return
   end
 
-  -- Look up from cwd
+  -- Look up from the current file, fall back to cwd for unnamed buffers
   local function find_build_dir()
-    local cwd = vim.fn.getcwd()
-    local path = cwd
+    local current_file = vim.api.nvim_buf_get_name(0)
+    local path
+
+    if current_file == "" then
+      path = vim.fn.getcwd()
+    else
+      path = vim.fn.fnamemodify(current_file, ":p:h")
+    end
+
     while path ~= '/' do
       local build_path = path .. '/build'
       if vim.fn.isdirectory(build_path) == 1 then
         return build_path
       end
-      path = vim.fn.fnamemodify(path, ':h')
+      local parent = vim.fn.fnamemodify(path, ":h")
+      if parent == path then
+        break
+      end
+      path = parent
     end
     return nil
   end
@@ -151,7 +172,7 @@ vim.keymap.set('n', '<C-g>', function()
 
   -- Run the make command
   vim.fn.chansend(vim.b.terminal_job_id,
-    'cd ' .. build_dir .. ' && ' .. cmd .. ' && exit || read -p "Press enter to continue..."\n')
+    'cd ' .. vim.fn.shellescape(build_dir) .. ' && ' .. cmd .. ' && exit || read -p "Press enter to continue..."\n')
 
   -- Switch back to the original window
   vim.api.nvim_set_current_win(original_win)
@@ -163,9 +184,14 @@ vim.keymap.set('n', '<C-g>', function()
 end, { noremap = true, silent = true })
 
 -- Toggle relative lines on or off
-vim.keymap.set("n", "<leader>rl", function()
+vim.keymap.set("n", "<leader>tr", function()
   vim.wo.relativenumber = not vim.wo.relativenumber
-end, { desc = "Toggle relative line nums." })
+end, { desc = "Toggle Relative Lines" })
+
+-- Toggle line numbers on or off
+vim.keymap.set("n", "<leader>tl", function()
+  vim.wo.number = not vim.wo.number
+end, { desc = "Toggle Line Numbers" })
 
 -- AMPS Client Code snippets
 local snippets = require("config.snippets")

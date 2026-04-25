@@ -27,9 +27,9 @@ return {
 
     -- custom filetype icon
     require("nvim-web-devicons").set_icon({
-      test = { icon = "", color = "#FFBC03", name = "Python" },
-      stage = { icon = "", color = "#FFBC03", name = "Python" },
-      stress = { icon = "", color = "#FFBC03", name = "Python" },
+      test = { icon = "", color = "#61AFEF", name = "Python_Test" },
+      stage = { icon = "", color = "#C678DD", name = "Python_Stage" },
+      stress = { icon = "", color = "#E06C75", name = "Python_Stress" },
     })
 
     -- Global Keymaps for Oil

@@ -71,7 +71,6 @@ return {
         -- dashboard.button("c", " " .. " Config", LazyVim.pick.config_files()),
         dashboard.button("s", " " .. " Restore Session", [[<cmd> lua require('persistence').load() <CR>]]),
         dashboard.button("u", " " .. " Update plugins", "<cmd> Lazy sync <CR>"),
-        dashboard.button("x", " " .. " Lazy Extras", "<cmd> LazyExtras <CR>"),
         dashboard.button("l", "󰒲 " .. " Lazy", "<cmd> Lazy <CR>"),
         dashboard.button("q", " " .. " Quit", "<cmd> qa <CR>"),
         { type = "padding", val = 1 },

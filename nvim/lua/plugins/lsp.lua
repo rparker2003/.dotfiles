@@ -1,130 +1,187 @@
 return {
   "neovim/nvim-lspconfig",
+  --------------------------------------------------------------------
+  -- DEPENDENCIES
+  -- Each plugin here fills a very specific role in the editor stack:
+  --------------------------------------------------------------------
   dependencies = {
-    "stevearc/conform.nvim",
+    -- Installs external tools (LSP servers, formatters, linters)
     "williamboman/mason.nvim",
-    "williamboman/mason-lspconfig.nvim",
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-    "hrsh7th/cmp-cmdline",
+
+    -- Formatting engine (we explicitly control formatting here)
+    "stevearc/conform.nvim",
+
+    -- Completion system (autocomplete UI)
     "hrsh7th/nvim-cmp",
+
+    -- Bridges LSP → completion engine
+    "hrsh7th/cmp-nvim-lsp",
+
+    -- Snippet engine (expands code templates)
     "L3MON4D3/LuaSnip",
+
+    -- Bridges snippets → completion engine
     "saadparwaiz1/cmp_luasnip",
+
+    -- Shows LSP status (progress, indexing, etc.)
     "j-hui/fidget.nvim",
+
+    -- Completion for words in Buffer
+    "hrsh7th/cmp-buffer",
   },
 
   config = function()
-    require("conform").setup({})
-    require("fidget").setup({})
-    require("mason").setup({})
+    ------------------------------------------------------------------
+    -- CORE
+    ------------------------------------------------------------------
+    require("mason").setup()
+    require("fidget").setup()
 
-    local cmp = require('cmp')
+    local conform = require("conform")
+    local cmp = require("cmp")
     local cmp_lsp = require("cmp_nvim_lsp")
 
-    local capabilities = vim.tbl_deep_extend(
-      "force",
-      vim.lsp.protocol.make_client_capabilities(),
-      cmp_lsp.default_capabilities()
-    )
+    -- This tells LSP servers that we support cmp capabilities
+    -- (so autocomplete works correctly with LSP suggestions)
+    local capabilities = cmp_lsp.default_capabilities()
 
-    require("mason-lspconfig").setup({
-      ensure_installed = {
-        "lua_ls",
-        "rust_analyzer",
-        -- "clangd",
+    ------------------------------------------------------------------
+    -- FORMATTING LAYER (CONFORM)
+    --
+    -- Important design choice:
+    -- We do NOT rely on LSP formatting because it is inconsistent
+    -- across languages and servers.
+    --
+    -- Instead:
+    -- - Python → autopep8 via conform
+    -- - C/C++ → handled manually or by ccls if needed
+    ------------------------------------------------------------------
+    ------------------------------------------------------------------
+    conform.setup({
+      formatters_by_ft = {
+        python = { "autopep8" }, -- your preference preserved
+
+        -- Explicitly disable auto-formatting for C/C++
+        -- (prevents unexpected full-file rewrites)
+        -- TODO: Implement allman google style formatting
+        cpp = {},
+        c = {},
       },
-      handlers = {
-        function(server_name) -- default handler (optional)
-          require("lspconfig")[server_name].setup {
-            capabilities = capabilities
-          }
-        end,
+      formatters = {
+        ["clang-format"] = {
+          -- append_args = { "--style={BasedOnStyle: Google, BreakBeforeBraces: Allman}" },
+          append_args = {
+            "--style={BasedOnStyle: LLVM, IndentWidth: 2, UseTab: Never, BreakBeforeBraces: Allman, PointerAlignment: Left, AllowShortIfStatementsOnASingleLine: false, AllowShortFunctionsOnASingleLine: None, AllowShortLoopsOnASingleLine: false, AllowShortBlocksOnASingleLine: Never}",
+          },
+        },
+      },
 
-        zls = function()
-          local lspconfig = require("lspconfig")
-          lspconfig.zls.setup({
-            root_dir = lspconfig.util.root_pattern(".git", "build.zig", "zls.json"),
-            settings = {
-              zls = {
-                enable_inlay_hints = true,
-                enable_snippets = true,
-                warn_style = true,
-              },
-            },
-          })
-          vim.g.zig_fmt_parse_errors = 0
-          vim.g.zig_fmt_autosave = 0
-        end,
-        ["lua_ls"] = function()
-          local lspconfig = require("lspconfig")
-          lspconfig.lua_ls.setup {
-            capabilities = capabilities,
-            settings = {
-              Lua = {
-                runtime = { version = "Lua 5.1" },
-                diagnostics = {
-                  globals = { "bit", "vim", "it", "describe", "before_each", "after_each" },
-                }
-              }
-            }
-          }
-        end,
-        ["clangd"] = function()
-          local lspconfig = require("lspconfig")
-          lspconfig.clangd.setup({
-            capabilities = capabilities,
-            cmd = { "clangd", "--background-index", "--pch-storage=memory", "--completion-style=detailed", "--clang-tidy" },
-          })
-        end,
-      }
+      -- We disable format-on-save to prevent:
+      -- - large unexpected rewrites
+      -- - conflicts between formatters
+      -- - disruption during small edits
+      format_on_save = false
     })
 
-    -- Manually configure ccls (not supported by Mason)
-    local lspconfig = require("lspconfig")
-    lspconfig.ccls.setup({
+    ------------------------------------------------------------------
+    -- LSP CONFIGURATION (MODERN API)
+    --
+    -- Each LSP provides:
+    -- - diagnostics (errors/warnings)
+    -- - autocomplete suggestions
+    -- - go-to-definition
+    ------------------------------------------------------------------
+
+    vim.lsp.config("lua_ls", {
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          diagnostics = {
+            globals = { "vim" }, -- avoid false "vim is undefined"
+          },
+        },
+      },
+    })
+
+    vim.lsp.config("ruff", {
+      capabilities = capabilities,
+    })
+
+    vim.lsp.config("bashls", {
+      capabilities = capabilities,
+    })
+
+    vim.lsp.config("biome", {
+      capabilities = capabilities,
+    })
+
+    ------------------------------------------------------------------
+    -- C / C++ LANGUAGE SERVER (ccls)
+    --
+    -- NOTE:
+    -- ccls provides:
+    -- - code navigation
+    -- - diagnostics
+    -- - indexing
+    --
+    -- Alternative is clangd (more modern, more widely used)
+    ------------------------------------------------------------------
+    vim.lsp.config("ccls", {
       capabilities = capabilities,
       init_options = {
-        cache = {
-          directory = ".ccls-cache"
-        },
+        cache = { directory = ".ccls-cache" },
         highlight = { lsRanges = true },
         compilationDatabaseDirectory = "build",
-      }
+      },
     })
 
-    local cmp_select = { behavior = cmp.SelectBehavior.Select }
+    ------------------------------------------------------------------
+    -- ENABLE LSP SERVERS
+    ------------------------------------------------------------------
+    vim.lsp.enable({
+      "lua_ls",
+      "ruff",
+      "bashls",
+      "biome",
+      "ccls",
+    })
 
+    ------------------------------------------------------------------
+    -- AUTOCOMPLETION (CMP)
+    --
+    -- This is your IntelliSense system:
+    -- It collects suggestions from:
+    -- - LSP servers
+    -- - snippets
+    -- - buffer text
+    ------------------------------------------------------------------
     cmp.setup({
       snippet = {
         expand = function(args)
-          require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+          require("luasnip").lsp_expand(args.body)
         end,
       },
       mapping = cmp.mapping.preset.insert({
-        ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-        ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-        ['<C-y>'] = cmp.mapping.confirm({ select = true }),
+        ["<C-p>"] = cmp.mapping.select_prev_item(),
+        ["<C-n>"] = cmp.mapping.select_next_item(),
+        ["<C-y>"] = cmp.mapping.confirm({ select = true }),
         ["<C-Space>"] = cmp.mapping.complete(),
       }),
-      sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-        { name = 'luasnip' }, -- For luasnip users.
-      }, {
-        { name = 'buffer' },
-      })
-    })
-
-    vim.diagnostic.config({
-      -- update_in_insert = true,
-      float = {
-        focusable = false,
-        style = "minimal",
-        border = "rounded",
-        source = "always",
-        header = "",
-        prefix = "",
+      sources = {
+        { name = "nvim_lsp" }, -- LSP suggestions
+        { name = "luasnip" },  -- snippet suggestions
+        { name = "buffer" },   -- words from open files
       },
     })
-  end
+
+    ------------------------------------------------------------------
+    -- DIAGNOSTICS UI
+    ------------------------------------------------------------------
+    vim.diagnostic.config({
+      float = {
+        border = "rounded",
+        source = "always",
+      },
+    })
+  end,
 }

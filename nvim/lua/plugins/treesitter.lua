@@ -10,6 +10,7 @@ return {
         "javascript",
         "typescript",
         "c",
+        "cpp",
         "lua",
         "rust",
         "jsdoc",
