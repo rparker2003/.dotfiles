@@ -93,7 +93,7 @@ export JIRA_URL="https://crankuptheamps.atlassian.net/"
 export PATH=$HOME/gfs/oss/cmake/4.1.1/bin:$PATH # amps build
 export PATH=$HOME/ampsVersion/AMPS-develop-Release-Linux/bin:$PATH # amps bins
 export COVFILE=$HOME/gfs/sixty/amps/bullseye_coverage.cov # bullseye coverage
-export PATH=$HOME/gfs/bullseye/bullseye/9.9.6/bin:$PATH # bullseye coverage
+export PATH=$HOME/gfs/bullseye/bullseye/9.24.3/bin:$PATH # bullseye coverage
 export PATH=$HOME/gfs/sixty/projects/billy/scripts:$PATH # plotting scripts
 export PATH=$HOME/gfs/sixty/projects/ray/stackdive/build:$PATH # stackdive minidump script
 
