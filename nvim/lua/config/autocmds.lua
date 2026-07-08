@@ -1,7 +1,6 @@
 -- Create helper functions for autogroups and autocommands
 local augroup = vim.api.nvim_create_augroup
 local autocmd = vim.api.nvim_create_autocmd
-local usercmd = vim.api.nvim_create_user_command
 
 -- Define custom autogroups
 local yank_group = augroup("HighlightYank", {})
@@ -31,23 +30,48 @@ autocmd("FileType", {
   group = format_group,
   pattern = "*",
   callback = function()
-    local ext = vim.bo.filetype
+    local ft = vim.bo.filetype
+
+    local ft_excludes = {
+      cpp = true,
+      hpp = true,
+      gitcommit = true,
+      gitrebase = true,
+      gitconfig = true,
+      markdown = true,  -- trailing spaces can be meaningful
+      text = true,      -- trailing spaces can be meaningful
+    }
 
     -- Disable trim trailing whitespace for C++ files (AMPS)
     if vim.b.trim_whitespace == nil then
-      if ext == "cpp" or ext == "hpp" then
-        vim.b.trim_whitespace = false
-      else
-        vim.b.trim_whitespace = true
-      end
+      vim.b.trim_whitespace = not ft_excludes[ft]
     end
 
     -- Auto set indentation for filetypes
-    if ext == "python" then
+    if ft == "python" then
       set_indent(4) -- call to set_indent in set.lua
     else
       set_indent(2)
     end
+
+    -- Treesitter
+    local lang = vim.treesitter.language.get_lang(ft)
+    if not lang or lang == "html" then
+      return
+    end
+
+    local max_filesize = 100 * 1024
+    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(0))
+    if ok and stats and stats.size > max_filesize then
+      vim.notify(
+        "File larger than 100KB treesitter disabled for performance",
+        vim.log.levels.WARN,
+        { title = "Treesitter" }
+      )
+      return
+    end
+
+    pcall(vim.treesitter.start)
   end
 })
 
@@ -61,12 +85,6 @@ autocmd({ "BufWritePre" }, {
     end
   end
 })
-
--- Toggle trimming for current buffer
-usercmd("TrimToggle", function()
-  vim.b.trim_whitespace = not vim.b.trim_whitespace
-  print("Trim trailing whitespace for this buffer: " .. (vim.b.trim_whitespace and "ON" or "OFF"))
-end, {})
 
 -- Set up keymaps when LSP atatches to a buffer
 autocmd("LspAttach", {

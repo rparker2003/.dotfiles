@@ -193,6 +193,12 @@ vim.keymap.set("n", "<leader>tl", function()
   vim.wo.number = not vim.wo.number
 end, { desc = "Toggle Line Numbers" })
 
+-- Toggle whitespace trimming for current buffer
+vim.keymap.set("n", "<leader>tt", function()
+  vim.b.trim_whitespace = not vim.b.trim_whitespace
+  print("Trim Whitespace: " .. (vim.b.trim_whitespace and "ON" or "OFF"))
+end, { desc = "Toggle Whitespace Trimming"})
+
 -- AMPS Client Code snippets
 local snippets = require("config.snippets")
 

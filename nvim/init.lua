@@ -1,3 +1,4 @@
+require("config.funcs")
 require("config.set")
 require("config.remap")
 require("config.autocmds")

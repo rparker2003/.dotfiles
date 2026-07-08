@@ -5,4 +5,8 @@ return {
   build = function()
     vim.fn["mkdp#util#install"]()
   end,
+  init = function()
+    vim.g.mkdp_echo_preview_url = 1
+    vim.g.mkdp_browser = "vivaldi"
+  end,
 }
