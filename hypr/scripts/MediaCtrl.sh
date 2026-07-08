@@ -51,7 +51,7 @@ show_music_notification() {
     "Paused")
         song_title=$(playerctl metadata title)
         song_artist=$(playerctl metadata artist)
-        notify-send -e -u low -i $music_icon " Now Playing:" " $song_title byn $song_artist"
+        notify-send -e -u low -i $music_icon " Now Playing:" " $song_title by $song_artist"
         ;;
     "Stopped" | "")
         notify-send -e -u low -i $music_icon " Playback:" " Stopped"
