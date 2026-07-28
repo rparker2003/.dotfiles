@@ -25,7 +25,6 @@ plugins=(
   themes
   tmux
   you-should-use
-  z
   zsh-autosuggestions
   zsh-syntax-highlighting
 )
@@ -33,11 +32,20 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 source <(fzf --zsh)  # fzf key bindings
 
+# in replace of 'z' plugin:
+if command -v zoxide &>/dev/null; then
+  eval "$(zoxide init zsh)"
+  alias cd="z"
+fi
+
 # === History Configuration ===
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=32768
+SAVEHIST=32768
 setopt appendhistory
+setopt sharehistory
+setopt histignoredups
+setopt histignorespace
 
 # === Aliases and Functions
 # GOD MODE VI IN TERMINAL
@@ -45,9 +53,9 @@ set -o vi
 
 # Set ls-related commands to use eza
 for cmd in ls ll lt; do unalias $cmd 2>/dev/null; done
-ls() { command eza --icons "$@"; }
-ll() { command eza -l --icons "$@"; }
-lt() { command eza --tree --level=2 --icons "$@"; }
+ls() { command eza -h --group-directories-first --icons=auto "$@"; }
+ll() { command eza -lh --group-directories-first --icons=auto "$@"; }
+lt() { command eza --tree --level=2 --long --group-directories-first --icons --git "$@"; }
 
 # Add directories to PATH if not already present
 if [[ ! "$PATH" =~ "$HOME/.local/bin" && ! "$PATH" =~ "$HOME/bin" ]]; then
@@ -79,11 +87,28 @@ fi
 
 alias vi='nvim' # too many letters
 alias c='clear' # way too many letters
+alias d='docker' # way way too many letters
+alias t='tmux attach || tmux new -s Work' # holy letters
 
 # so I don't have to remember the $(getconf PATH)
 resetpath() {
   export PATH=$(getconf PATH)
 }
+
+
+# === Omarchy Configuration ===
+# Omarchy environment
+export SUDO_EDITOR="$EDITOR"
+export BAT_THEME=ansi
+
+# Color man pages with bat
+export MANROFFOPT="-c"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# Omarchy paths
+export OMARCHY_PATH="$HOME/.local/share/omarchy"
+
+
 
 # === AMPS Configuration ===
 ulimit -n 32768
