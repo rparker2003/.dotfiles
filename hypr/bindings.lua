@@ -169,4 +169,6 @@ o.bind("SUPER + ESCAPE", "Apps menu", "omarchy-menu toggle apps")
 
 
 -- Re-bind Omarchy emoji menu to SUPER + PERIOD
+hl.unbind("SUPER + CTRL + E")
+o.bind("SUPER + SHIFT + PERIOD", "Emojis", "omarchy-shell shell toggle omarchy.emojis")
 
